@@ -48,7 +48,7 @@ function text(event: string, b: any, s: any) {
     return `Baxnaano Hospital: Lambarka safkaagu waa #${b.queue_number} (${b.ref}), ${b.doctor_name}, ${day(b.visit_date)}. Bixi $${Number(b.fee)}: ${pay}`;
   if (event === "paid")
     return `Baxnaano: Lacagtii waa la helay. Safkaaga #${b.queue_number}, ${b.doctor_name}, ${day(b.visit_date)}. Ha soo kallahin - lambar hore, hore ayaad u gelaysaa. Mahadsanid!`;
-  return `Baxnaano: Maanta waa ballankaaga. Safkaaga #${b.queue_number}, ${b.doctor_name}. Zoobe KM5, ka soo horjeedka Hayat Supermarket. Mahadsanid!`;
+  return `Baxnaano: Maanta waa ballankaaga. Safkaaga #${b.queue_number}, ${b.doctor_name}. Zoobe KM5, ka soo horjeedka Hayat Market. Mahadsanid!`;
 }
 const COL: Record<string, string> = { booked: "sms_booked_at", paid: "sms_paid_at", reminder: "sms_reminder_at" };
 

@@ -351,9 +351,9 @@ footer a{color:#fff}
       <div class="loc">
         <div class="pin">📍</div>
         <h3>Baxnaano Hospital</h3>
-        <p><b>Zoobe (KM5), Degmada Wadajir</b><br>Ka soo horjeedka <b>Hayat Supermarket</b>, Muqdisho</p>
+        <p><b>Zoobe (KM5), Degmada Wadajir</b><br>Ka soo horjeedka <b>Hayat Market</b>, Muqdisho</p>
         <div class="acts">
-          <a class="btn btn-white" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Hayat+Supermarket+Zoobe+KM5+Mogadishu">🗺️ Khariidadda</a>
+          <a class="btn btn-white" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Hayat+Market+Zope+Mogadishu">🗺️ Khariidadda</a>
           <a class="btn btn-ghost" href="#xiriir">📞 Wac</a>
         </div>
       </div>
@@ -463,7 +463,7 @@ function renderChrome(){
   ph.forEach((p) => c.push(`<a class="ct" href="tel:${esc(p.replace(/[^\d+]/g,''))}"><span class="ic">📞</span><span><small>Wac</small><b>${esc(fmtPhone(p))}</b></span></a>`));
   if (wa) c.push(`<a class="ct" href="https://wa.me/${wa}" target="_blank" rel="noopener"><span class="ic" style="background:#dcfce7">💬</span><span><small>WhatsApp</small><b>${esc(fmtPhone(wa))}</b></span></a>`);
   if (S.email) c.push(`<a class="ct" href="mailto:${esc(S.email)}"><span class="ic">✉️</span><span><small>Email</small><b>${esc(S.email)}</b></span></a>`);
-  if (S.address) c.push(`<a class="ct" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(S.hospital_name+' '+S.address)}" target="_blank" rel="noopener"><span class="ic">📍</span><span><small>Goobta</small><b>${esc(S.address)}</b></span></a>`);
+  if (S.address) c.push(`<a class="ct" href="https://www.google.com/maps/search/?api=1&query=Hayat+Market+Zope+Mogadishu" target="_blank" rel="noopener"><span class="ic">📍</span><span><small>Goobta</small><b>${esc(S.address)}</b></span></a>`);
   c.push(`<div class="ct"><span class="ic">🕗</span><span><small>Saacadaha shaqada</small><b>${t12(S.open_time)} – ${t12(S.close_time)}</b></span></div>`);
   $('contact').innerHTML = c.join('');
   $('fCopy').innerHTML = `© ${new Date().getFullYear()} ${esc(S.hospital_name)} · Muqdisho`;
@@ -636,7 +636,7 @@ let installEvt = null;
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); installEvt = e; });
 $('shareBtn').onclick = async () => {
   const url = location.origin + location.pathname;
-  const text = `Baxnaano Hospital — ha soo kallahin! Lambarka safka taleefankaaga ka qabso: ${url}\n📍 Zoobe (KM5), Wadajir — ka soo horjeedka Hayat Supermarket`;
+  const text = `Baxnaano Hospital — ha soo kallahin! Lambarka safka taleefankaaga ka qabso: ${url}\n📍 Zoobe (KM5), Wadajir — ka soo horjeedka Hayat Market`;
   if (navigator.share){ try { await navigator.share({ title: 'Baxnaano — Ballan online', text, url }); return; } catch(e){ if (e && e.name === 'AbortError') return; } }
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
 };
