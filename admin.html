@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin — Baxnaano Booking</title>
+<meta name="theme-color" content="#0f2a3d">
+<link rel="icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f2a3d;--brand:#0b8f7a;--brand2:#0a6c8c;--soft:#e6f5f1;--ink:#0f2a3d;--ink2:#3d5a6c;--muted:#6b8494;--line:#e2eaee;--bg:#f3f6f8;--ok:#14955f;--warn:#b7791f;--bad:#c2414b;--sh:0 1px 2px rgba(15,42,61,.05),0 6px 18px rgba(15,42,61,.06)}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+[hidden]{display:none!important}
+.top{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.top .in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.top img{width:34px;height:34px;border-radius:9px}
+.top b{font-size:15px}.top small{display:block;color:#9fc0cf;font-size:11.5px}
+.top .sp{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12.5px;color:#9fc0cf}
+.top button{background:rgba(255,255,255,.12);border:0;color:#fff;padding:8px 12px;border-radius:10px}
+.tabs{max-width:1180px;margin:0 auto;padding:12px 16px 0;display:flex;gap:6px;overflow-x:auto}
+.tab{padding:10px 16px;border-radius:12px;border:0;background:transparent;font-weight:700;color:var(--muted);white-space:nowrap}
+.tab.on{background:#fff;color:var(--ink);box-shadow:var(--sh)}
+main{max-width:1180px;margin:0 auto;padding:14px 16px 60px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--sh);margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--sh)}
+.stat small{color:var(--muted);font-size:12px;font-weight:600}.stat b{display:block;font-size:24px;font-weight:800;margin-top:2px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.bar input,.bar select{padding:10px 12px;border-radius:11px;border:1.5px solid var(--line);background:#fff}
+.bar .grow{flex:1 1 200px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 15px;border-radius:11px;border:0;font-weight:700;font-size:13.5px;white-space:nowrap}
+.btn-main{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff}
+.btn-line{background:#fff;border:1.5px solid var(--line)}
+.btn-ok{background:#dcf5e8;color:#0e7a4c}.btn-blue{background:#dbeafe;color:#1d4ed8}.btn-bad{background:#fde2e4;color:#9b2c35}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.sm{padding:7px 10px;font-size:12.5px;border-radius:9px}
+table{width:100%;border-collapse:collapse}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border:0}
+.q{font-weight:800;font-size:16px;color:var(--brand)}
+.muted{color:var(--muted);font-size:12.5px}
+.st{display:inline-block;padding:4px 9px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.st.pending{background:#fff4d6;color:#8a5a00}.st.paid{background:#dcf5e8;color:#0e7a4c}.st.arrived{background:#dbeafe;color:#1d4ed8}.st.cancelled{background:#fde2e4;color:#9b2c35}
+.od{display:inline-block;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.od.waiting{background:#eef2f5;color:var(--muted)}.od.sent{background:#dcf5e8;color:#0e7a4c}.od.error{background:#fde2e4;color:#9b2c35}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:760px){
+  table.resp thead{display:none}
+  table.resp tr{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  table.resp td{border:0;padding:0}
+  table.resp td.q{grid-row:span 3;font-size:22px;padding-top:2px}
+  table.resp td.full{grid-column:2}
+}
+.docs{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.dc{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--sh)}
+.dc.off{opacity:.55}
+.av{width:56px;height:56px;border-radius:50%;overflow:hidden;background:var(--soft);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--brand);flex:0 0 auto}
+.av img{width:100%;height:100%;object-fit:cover;object-position:top}
+.dc b{display:block}.dc .r{margin-left:auto}
+.f{display:grid;gap:5px;margin-bottom:12px}
+.f label{font-size:12.5px;font-weight:700;color:var(--ink2)}
+.f input,.f select,.f textarea{width:100%;padding:11px 12px;border-radius:11px;border:1.5px solid var(--line);background:#fbfdfd}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--brand)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 12px}
+.days{display:flex;gap:6px;flex-wrap:wrap}
+.days label{display:flex;align-items:center;gap:5px;padding:7px 10px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;font-weight:600}
+.sw{display:flex;align-items:center;gap:10px;font-weight:700}
+.sw input{width:20px;height:20px;accent-color:var(--brand)}
+.ov{position:fixed;inset:0;z-index:50;background:rgba(10,25,36,.55);display:flex;align-items:center;justify-content:center;padding:14px}
+.modal{background:#fff;border-radius:20px;padding:20px;width:100%;max-width:560px;max-height:92vh;overflow:auto}
+.modal h3{margin:0 0 14px}
+.login{max-width:380px;margin:9vh auto;padding:0 16px}
+.login .card{padding:26px}
+.login img{width:56px;height:56px;border-radius:14px;display:block;margin:0 auto 10px}
+.login h2{text-align:center;margin:0 0 4px}.login p{text-align:center;color:var(--muted);margin:0 0 18px}
+.err{background:#fdecee;color:#9b2c35;padding:10px 12px;border-radius:11px;margin-bottom:12px;font-size:13.5px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 16px;border-radius:12px;opacity:0;transition:.3s;pointer-events:none;z-index:99}
+.toast.show{opacity:1}
+@media(max-width:600px){#who,.top small{display:none}.top .sp{gap:8px}.stats{grid-template-columns:repeat(3,1fr)}.stat b{font-size:20px}.stat{padding:10px}.bar select,.bar input[type=date]{flex:1 1 45%}}
+.top button{white-space:nowrap}
+.empty{text-align:center;color:var(--muted);padding:30px}
+.demo{background:#fff3cd;color:#7a5800;text-align:center;font-size:12.5px;font-weight:700;padding:6px}
+.ph-prev{display:flex;align-items:center;gap:12px}
+</style>
+</head>
+<body>
+<div class="demo" id="demoTag" hidden>DEMO MODE — xogtu kaliya browser-kan ayay ku jirtaa. Buuxi config.js si aad ugu xidho Supabase.</div>
+
+<!-- LOGIN -->
+<div class="login" id="loginView" hidden>
+  <div class="card">
+    <img src="icon-192.png" alt=""><h2>Admin</h2><p>Baxnaano Online Booking</p>
+    <div class="err" id="loginErr" hidden></div>
+    <form id="loginForm">
+      <div class="f"><label for="lEmail">Email</label><input id="lEmail" type="email" autocomplete="username" required></div>
+      <div class="f"><label for="lPass">Password</label><input id="lPass" type="password" autocomplete="current-password" required></div>
+      <button class="btn btn-main" style="width:100%;padding:13px" type="submit" id="lBtn">Gal</button>
+    </form>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appView" hidden>
+  <header class="top"><div class="in"><img src="icon-192.png" alt=""><div><b id="tName">Baxnaano Hospital</b><small>Admin · Ballamaha online-ka</small></div>
+    <div class="sp"><span id="who"></span><a href="./" target="_blank" style="color:#fff">Bogga ↗</a><button id="logout">Ka bax</button></div></div></header>
+  <nav class="tabs"><button class="tab on" data-t="bk">📋 Ballamaha</button><button class="tab" data-t="dr">🩺 Dhakhaatiirta</button><button class="tab" data-t="st">⚙️ Dejinta</button></nav>
+  <main>
+    <section id="t-bk">
+      <div class="stats" id="stats"></div>
+      <div class="card">
+        <div class="bar">
+          <input type="date" id="fDate">
+          <select id="fDoc"><option value="">Dhammaan dhakhaatiirta</option></select>
+          <select id="fSt"><option value="">Dhammaan xaaladaha</option><option value="pending">⏳ Lacag sugaya</option><option value="paid">✅ La bixiyay</option><option value="arrived">🏥 Yimid</option><option value="cancelled">✕ La joojiyay</option></select>
+          <input class="grow" id="fQ" type="search" placeholder="Raadi magac, taleefan ama BX-…">
+          <button class="btn btn-line" id="refresh">↻</button>
+        </div>
+        <div style="overflow-x:auto"><table class="resp"><thead><tr><th>Safka</th><th>Bukaanka</th><th>Dhakhtarka</th><th>Waqtiga</th><th>Xaaladda</th><th>Odoo</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="t-dr" hidden>
+      <div class="bar"><h3 style="margin:0">Dhakhaatiirta</h3><button class="btn btn-main" id="addDoc" style="margin-left:auto">➕ Dhakhtar cusub</button></div>
+      <div class="docs" id="docList"></div>
+    </section>
+
+    <section id="t-st" hidden>
+      <form class="card" id="setForm">
+        <div class="sw" style="margin-bottom:14px"><input type="checkbox" id="sOpen"><label for="sOpen">Ballamaha online-ka waa furan yihiin</label></div>
+        <div class="g2">
+          <div class="f"><label>Magaca isbitaalka</label><input id="sName"></div>
+          <div class="f"><label>Hal-ku-dhig</label><input id="sTag"></div>
+          <div class="f"><label>Taleefannada (ku kala saar comma)</label><input id="sPhones" placeholder="0610000000, 0620000000"></div>
+          <div class="f"><label>WhatsApp (252…)</label><input id="sWa"></div>
+          <div class="f"><label>Email</label><input id="sEmail" type="email"></div>
+          <div class="f"><label>Cinwaanka</label><input id="sAddr"></div>
+          <div class="f"><label>Furitaanka</label><input id="sOpenT" type="time"></div>
+          <div class="f"><label>Xidhitaanka</label><input id="sClose" type="time"></div>
+          <div class="f"><label>Daqiiqado bukaan kasta</label><input id="sSlot" type="number" min="5" max="120"></div>
+          <div class="f"><label>USSD prefix</label><input id="sUssd"></div>
+          <div class="f"><label>Lambarka lacagta lagu bixiyo</label><input id="sUssdN"></div>
+        </div>
+        <div class="f"><label>Ogeysiis (wuxuu ka muuqanayaa bogga sare)</label><textarea id="sAnn" rows="2"></textarea></div>
+        <button class="btn btn-main" type="submit">💾 Kaydi</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<!-- DOCTOR MODAL -->
+<div class="ov" id="docOv" hidden><form class="modal" id="docForm">
+  <h3 id="docTitle">Dhakhtar</h3>
+  <div class="f ph-prev"><span class="av" id="dPrev"></span><div style="flex:1"><label class="btn btn-line sm" for="dFile">📷 Sawir soo geli</label><input type="file" id="dFile" accept="image/*" hidden><div class="muted" id="dUp"></div></div></div>
+  <div class="f"><label>Magaca</label><input id="dName" required placeholder="Dr. …"></div>
+  <div class="g2">
+    <div class="f"><label>Takhasuska</label><input id="dSpec" required list="specList" placeholder="Neerfaha (Neurologist)"></div>
+    <div class="f"><label>Lacagta ($)</label><input id="dFee" type="number" min="0" step="0.5" required></div>
+    <div class="f"><label>Bukaanno maalintii (ugu badnaan)</label><input id="dLimit" type="number" min="1" required></div>
+    <div class="f"><label>Odoo Doctor ID</label><input id="dOdoo" type="number" min="1" placeholder="tusaale 22"></div>
+    <div class="f"><label>Kala horreynta</label><input id="dSort" type="number"></div>
+  </div>
+  <datalist id="specList"><option>Carruurta (Pediatrician)</option><option>Neerfaha (Neurologist)</option><option>Cudurrada Guud (General Medicine)</option><option>Haweenka &amp; Umulaha (Gynecology)</option><option>Lafaha (Orthopedics)</option><option>Wadnaha (Cardiology)</option><option>Indhaha (Ophthalmology)</option><option>Ilkaha (Dentist)</option><option>Maqaarka (Dermatology)</option><option>Dhegaha, Sanka &amp; Cunaha (ENT)</option><option>Daaweynta Hadalka (Speech Therapy)</option><option>Jimicsiga Daaweynta (Physiotherapy)</option></datalist>
+  <div class="f"><label>Maalmaha uu shaqeeyo</label><div class="days" id="dDays"></div></div>
+  <div class="f"><label>Faahfaahin gaaban (ikhtiyaari)</label><textarea id="dBio" rows="2"></textarea></div>
+  <div class="sw" style="margin-bottom:14px"><input type="checkbox" id="dActive"><label for="dActive">Wuxuu ka muuqdaa bogga</label></div>
+  <div class="acts"><button class="btn btn-line" type="button" id="dCancel">Ka noqo</button><button class="btn btn-main" type="submit" style="margin-left:auto">💾 Kaydi</button></div>
+</form></div>
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script src="api.js"></script>
+<script>
+(function(){
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const WEEK = ['Axad','Isniin','Talaado','Arbaco','Khamiis','Jimce','Sabti'];
+const ST = { pending:'⏳ Lacag sugaya', paid:'✅ La bixiyay', arrived:'🏥 Yimid', cancelled:'✕ La joojiyay' };
+const OD = { waiting:'Sugaya', sent:'✓ Odoo', error:'⚠ Khalad' };
+let S = {}, DOCS = [], ROWS = [], editing = null;
+function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2800); }
+function t12(t){ const [h,m] = String(t||'').slice(0,5).split(':').map(Number); return isNaN(h) ? '' : `${((h+11)%12)+1}:${String(m).padStart(2,'0')} ${h>=12?'PM':'AM'}`; }
+const ini = (n) => String(n||'').replace(/^dr\.?\s*/i,'').split(/\s+/).slice(0,2).map((w) => w[0]||'').join('').toUpperCase();
+const av = (d) => d.photo_url ? `<img src="${esc(d.photo_url)}" alt="">` : esc(ini(d.name));
+
+/* ---------- auth ---------- */
+async function start(){
+  $('demoTag').hidden = BX.LIVE;
+  const s = await BX.session().catch(() => null);
+  if (s){ $('who').textContent = s.user && s.user.email || ''; $('loginView').hidden = true; $('appView').hidden = false; await loadAll(); }
+  else { $('appView').hidden = true; $('loginView').hidden = false; }
+}
+$('loginForm').onsubmit = async (e) => {
+  e.preventDefault(); $('lBtn').disabled = true; $('loginErr').hidden = true;
+  try { await BX.login($('lEmail').value.trim(), $('lPass').value); await start(); }
+  catch(err){ $('loginErr').textContent = err.message; $('loginErr').hidden = false; }
+  $('lBtn').disabled = false;
+};
+$('logout').onclick = async () => { await BX.logout(); location.reload(); };
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('.tab').forEach((t) => t.onclick = () => {
+  document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('on', x === t));
+  ['bk','dr','st'].forEach((k) => $('t-'+k).hidden = k !== t.dataset.t);
+});
+
+/* ---------- load ---------- */
+async function loadAll(){
+  [S, DOCS] = await Promise.all([BX.settings(), BX.allDoctors()]);
+  $('tName').textContent = S.hospital_name;
+  $('fDoc').innerHTML = '<option value="">Dhammaan dhakhaatiirta</option>' + DOCS.map((d) => `<option value="${d.id}">${esc(d.name)}</option>`).join('');
+  if (!$('fDate').value) $('fDate').value = BX.mogNow().date;
+  fillSettings(); renderDocs(); await loadBookings();
+  if (!window._watch){ window._watch = BX.watchBookings(() => { clearTimeout(window._wt); window._wt = setTimeout(loadBookings, 600); }); }
+}
+async function loadBookings(){
+  const d = $('fDate').value;
+  try { ROWS = await BX.bookings(d, d); } catch(e){ toast(e.message); ROWS = []; }
+  renderRows();
+}
+function renderRows(){
+  const doc = $('fDoc').value, st = $('fSt').value, q = $('fQ').value.trim().toLowerCase();
+  const list = ROWS.filter((b) => (!doc || b.doctor_id === doc) && (!st || b.status === st) && (!q || `${b.patient_name} ${b.phone} ${b.ref}`.toLowerCase().includes(q)));
+  const live = ROWS.filter((b) => b.status !== 'cancelled');
+  const money = ROWS.filter((b) => b.status === 'paid' || b.status === 'arrived').reduce((a,b) => a + Number(b.fee), 0);
+  $('stats').innerHTML = [['Ballamaha', live.length],['⏳ Lacag sugaya', ROWS.filter((b) => b.status==='pending').length],['✅ La bixiyay', ROWS.filter((b) => b.status==='paid').length],['🏥 Yimid', ROWS.filter((b) => b.status==='arrived').length],['💵 Lacagta', '$'+money]]
+    .map(([l,v]) => `<div class="stat"><small>${l}</small><b>${v}</b></div>`).join('');
+  $('rows').innerHTML = list.map((b) => `<tr>
+    <td class="q">#${b.queue_number}</td>
+    <td class="full"><b>${esc(b.patient_name)}</b><div class="muted">${esc(b.phone)} · ${b.age ?? '–'} sano · ${b.gender==='male'?'Lab':b.gender==='female'?'Dhedig':'–'}${b.district ? ' · '+esc(b.district) : ''}${b.is_returning ? ' · horay u yimid' : ' · cusub'}</div>${b.notes ? `<div class="muted">📝 ${esc(b.notes)}</div>` : ''}<div class="muted">${esc(b.ref)}</div></td>
+    <td class="full">${esc(b.doctor_name)}<div class="muted">$${Number(b.fee)}</div></td>
+    <td class="full">${t12(b.visit_time)}</td>
+    <td class="full"><span class="st ${b.status}">${ST[b.status]}</span></td>
+    <td class="full"><span class="od ${b.odoo_status}" title="${esc(b.odoo_error||'')}">${OD[b.odoo_status]||b.odoo_status}</span>${b.odoo_status==='error' ? ` <button class="btn btn-line sm" data-odoo="${b.id}">↻</button>` : ''}</td>
+    <td class="full"><div class="acts">
+      ${b.status==='pending' ? `<button class="btn btn-ok sm" data-s="paid" data-id="${b.id}">✅ Bixiyay</button>` : ''}
+      ${b.status==='paid' ? `<button class="btn btn-blue sm" data-s="arrived" data-id="${b.id}">🏥 Yimid</button>` : ''}
+      ${b.status!=='cancelled' && b.status!=='arrived' ? `<button class="btn btn-bad sm" data-s="cancelled" data-id="${b.id}">✕</button>` : ''}
+      <a class="btn btn-line sm" target="_blank" rel="noopener" href="https://wa.me/252${esc(String(b.phone).replace(/^0/,''))}?text=${encodeURIComponent(`Salaan ${b.patient_name}, ballankaaga ${b.ref} ee ${b.doctor_name}: ${t12(b.visit_time)}, safka #${b.queue_number}. ${S.hospital_name}`)}">💬</a>
+    </div></td></tr>`).join('') || `<tr><td colspan="7" class="empty">Ballan lama helin maalintan.</td></tr>`;
+}
+['fDoc','fSt'].forEach((i) => $(i).onchange = renderRows);
+$('fQ').oninput = renderRows;
+$('fDate').onchange = loadBookings;
+$('refresh').onclick = loadBookings;
+$('rows').onclick = async (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  b.disabled = true;
+  try {
+    if (b.dataset.odoo){ const r = await BX.resendOdoo(b.dataset.odoo); toast(r && r.ok === false ? '⚠ ' + r.error : 'Odoo waa loo diray'); }
+    else {
+      if (b.dataset.s === 'cancelled' && !confirm('Ma hubtaa inaad joojiso ballankan?')) { b.disabled = false; return; }
+      await BX.setStatus(b.dataset.id, b.dataset.s); toast(b.dataset.s === 'paid' ? '✅ Waa la bixiyay — Odoo ayaa loo dirayaa' : 'Waa la cusboonaysiiyay');
+    }
+  } catch(err){ toast(err.message); }
+  setTimeout(loadBookings, 700);
+};
+
+/* ---------- doctors ---------- */
+function renderDocs(){
+  $('docList').innerHTML = DOCS.map((d) => `<div class="dc ${d.active?'':'off'}"><span class="av">${av(d)}</span><div><b>${esc(d.name)}</b><div class="muted">${esc(d.specialty)}</div><div class="muted">$${Number(d.fee)} · ${d.daily_limit}/maalin · Odoo #${d.odoo_doctor_id ?? '—'}${d.active?'':' · qarsoon'}</div></div><button class="btn btn-line sm r" data-edit="${d.id}">✏️</button></div>`).join('') || '<div class="empty">Dhakhtar ma jiro.</div>';
+}
+$('docList').onclick = (e) => { const b = e.target.closest('[data-edit]'); if (b) openDoc(DOCS.find((d) => d.id === b.dataset.edit)); };
+$('addDoc').onclick = () => openDoc(null);
+function openDoc(d){
+  editing = d ? Object.assign({}, d) : { name:'', specialty:'', fee:10, daily_limit:40, work_days:[0,1,2,3,4,5,6], active:true, sort_order: DOCS.length + 1, bio:'', photo_url:'' };
+  $('docTitle').textContent = d ? 'Wax ka beddel dhakhtarka' : 'Dhakhtar cusub';
+  $('dName').value = editing.name; $('dSpec').value = editing.specialty; $('dFee').value = editing.fee; $('dLimit').value = editing.daily_limit;
+  $('dOdoo').value = editing.odoo_doctor_id ?? ''; $('dSort').value = editing.sort_order ?? 0; $('dBio').value = editing.bio || ''; $('dActive').checked = editing.active !== false;
+  $('dDays').innerHTML = WEEK.map((w,i) => `<label><input type="checkbox" value="${i}" ${(editing.work_days||[]).includes(i)?'checked':''}>${w}</label>`).join('');
+  $('dPrev').innerHTML = av(editing); $('dUp').textContent = ''; $('docOv').hidden = false;
+}
+$('dCancel').onclick = () => $('docOv').hidden = true;
+$('dFile').onchange = async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  if (f.size > 3e6){ toast('Sawirku waa inuu ka yaraadaa 3MB'); return; }
+  $('dUp').textContent = 'Waa la soo gelinayaa…';
+  try { editing.photo_url = await BX.uploadPhoto(f); $('dPrev').innerHTML = av(editing); $('dUp').textContent = '✓ Sawirka waa la geliyay'; }
+  catch(err){ $('dUp').textContent = '⚠ ' + err.message; }
+};
+$('docForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const days = [...$('dDays').querySelectorAll('input:checked')].map((x) => +x.value);
+  if (!days.length){ toast('Dooro ugu yaraan hal maalin'); return; }
+  const row = { id: editing.id, name: $('dName').value.trim(), specialty: $('dSpec').value.trim(), fee: +$('dFee').value, daily_limit: +$('dLimit').value,
+    odoo_doctor_id: $('dOdoo').value ? +$('dOdoo').value : null, sort_order: +$('dSort').value || 0, bio: $('dBio').value.trim() || null,
+    photo_url: editing.photo_url || null, work_days: days, active: $('dActive').checked };
+  try { await BX.saveDoctor(row); $('docOv').hidden = true; toast('💾 Waa la kaydiyay'); DOCS = await BX.allDoctors(); renderDocs(); }
+  catch(err){ toast(err.message); }
+};
+
+/* ---------- settings ---------- */
+function fillSettings(){
+  $('sOpen').checked = !!S.booking_open; $('sName').value = S.hospital_name || ''; $('sTag').value = S.tagline || '';
+  $('sPhones').value = (S.phones || []).join(', '); $('sWa').value = S.whatsapp || ''; $('sEmail').value = S.email || ''; $('sAddr').value = S.address || '';
+  $('sOpenT').value = String(S.open_time||'').slice(0,5); $('sClose').value = String(S.close_time||'').slice(0,5); $('sSlot').value = S.slot_minutes;
+  $('sUssd').value = S.ussd_prefix || ''; $('sUssdN').value = S.ussd_number || ''; $('sAnn').value = S.announcement || '';
+}
+$('setForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const s = { booking_open: $('sOpen').checked, hospital_name: $('sName').value.trim(), tagline: $('sTag').value.trim(),
+    phones: $('sPhones').value.split(',').map((x) => x.trim()).filter(Boolean), whatsapp: $('sWa').value.replace(/\D/g,''), email: $('sEmail').value.trim() || null,
+    address: $('sAddr').value.trim(), open_time: $('sOpenT').value, close_time: $('sClose').value, slot_minutes: +$('sSlot').value || 15,
+    ussd_prefix: $('sUssd').value.trim(), ussd_number: $('sUssdN').value.replace(/\D/g,''), announcement: $('sAnn').value.trim() || null };
+  try { await BX.saveSettings(s); S = Object.assign(S, s); $('tName').textContent = S.hospital_name; toast('💾 Dejinta waa la kaydiyay'); } catch(err){ toast(err.message); }
+};
+
+start();
+})();
+</script>
+</body>
+</html>

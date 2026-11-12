@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ballan Dhakhtar — Baxnaano Hospital</title>
+<meta name="description" content="Baxnaano Hospital, Muqdisho — ballanso dhakhtarkaaga adigoo meel kasta jooga. Dooro dhakhtar, geli xogta bukaanka, kuna bixi taleefankaaga.">
+<meta name="theme-color" content="#0f2a3d">
+<meta property="og:title" content="Baxnaano Hospital — Ballan Dhakhtar">
+<meta property="og:description" content="Ballanso dhakhtarkaaga adigoo meel kasta jooga.">
+<meta property="og:image" content="icon-512.png">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2a3d;--navy2:#143a52;--brand:#0b8f7a;--brand2:#0a6c8c;--soft:#e6f5f1;--ink:#0f2a3d;--ink2:#3d5a6c;--muted:#6b8494;
+  --line:#e2eaee;--bg:#f5f8f9;--card:#fff;--ok:#14955f;--warn:#b7791f;--bad:#c2414b;--r:20px;
+  --sh:0 1px 2px rgba(15,42,61,.05),0 8px 24px rgba(15,42,61,.07);--sh2:0 20px 50px rgba(15,42,61,.18);
+  --ease:cubic-bezier(.22,.61,.36,1)
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;letter-spacing:-.02em;line-height:1.2}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+img{max-width:100%;display:block}
+[hidden]{display:none!important}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+
+/* header */
+.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.88);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.brand img{width:40px;height:40px;border-radius:11px;box-shadow:var(--sh)}
+.brand b{display:block;font-size:15.5px;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.brand small{display:block;font-size:11.5px;color:var(--brand);font-weight:600;margin-top:-2px}
+.nav{display:none;gap:4px;margin-left:auto}
+.nav a{padding:8px 12px;border-radius:999px;text-decoration:none;font-size:14px;color:var(--ink2);font-weight:500}
+.nav a:hover{background:var(--soft);color:var(--brand)}
+.call{margin-left:auto;display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:999px;background:var(--navy);color:#fff;text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap}
+@media(min-width:820px){.nav{display:flex}.call{margin-left:8px}}
+.annc{background:#fff6df;color:#7a4d06;font-size:13.5px;text-align:center;padding:9px 14px;border-bottom:1px solid #f4e2b4}
+
+/* hero */
+.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(900px 500px at 85% -10%,rgba(11,143,122,.55),transparent 60%),radial-gradient(700px 500px at -10% 120%,rgba(10,108,140,.6),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy2))}
+.hero::before{content:"";position:absolute;inset:0;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cpath d='M19 12h6v7h7v6h-7v7h-6v-7h-7v-6h7z' fill='%23fff'/%3E%3C/svg%3E")}
+.hero .wrap{position:relative;display:grid;gap:28px;padding-top:44px;padding-bottom:56px}
+@media(min-width:900px){.hero .wrap{grid-template-columns:1.15fr .85fr;align-items:center;padding-top:70px;padding-bottom:84px}}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);font-size:13px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pulse 1.8s infinite}
+.dot.off{background:#fbbf24;animation:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.6)}70%{box-shadow:0 0 0 9px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+.hero h1{font-size:clamp(30px,6.4vw,52px);font-weight:800;margin:16px 0 12px;max-width:16ch}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,#5eead4,#7dd3fc);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:clamp(15px,2.4vw,18px);color:#cfe4ec;max-width:46ch;margin:0 0 24px}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:14px;border:0;font-weight:700;font-size:15px;text-decoration:none;transition:transform .2s var(--ease),box-shadow .2s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn-white{background:#fff;color:var(--navy);box-shadow:0 10px 28px rgba(0,0,0,.25)}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.btn-main{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 8px 20px rgba(11,143,122,.3)}
+.btn-main:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+.btn-line{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
+.btn-wa{background:#25d366;color:#fff}
+.btn.block{width:100%}
+.hero-meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:26px;font-size:13.5px;color:#cfe4ec}
+.hero-meta b{color:#fff;font-size:20px;display:block}
+.hero-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:24px;padding:18px;backdrop-filter:blur(10px)}
+.hc-title{font-size:13px;color:#cfe4ec;margin-bottom:12px;font-weight:600}
+.hc-docs{display:grid;gap:10px}
+.hc-doc{display:flex;align-items:center;gap:12px;padding:10px;border-radius:16px;background:rgba(255,255,255,.95);color:var(--ink);text-align:left;border:0;width:100%;transition:transform .2s var(--ease)}
+.hc-doc:hover{transform:translateX(4px)}
+.hc-doc .av{width:46px;height:46px;flex:0 0 auto}
+.hc-doc b{display:block;font-size:14px}
+.hc-doc small{color:var(--muted);font-size:12px}
+.hc-doc .fee{margin-left:auto;font-weight:800;color:var(--brand)}
+
+/* sections */
+section.sec{padding:56px 0}
+.sec-h{text-align:center;max-width:620px;margin:0 auto 28px}
+.kick{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);margin-bottom:6px}
+.sec-h h2{font-size:clamp(24px,4.5vw,34px);font-weight:800}
+.sec-h p{color:var(--muted);margin:8px 0 0}
+.steps{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));counter-reset:s}
+.step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--sh)}
+.step .n{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));margin-bottom:14px}
+.step h3{font-size:17px;margin-bottom:4px}
+.step p{margin:0;color:var(--muted);font-size:14px}
+
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.search{flex:1 1 240px;position:relative}
+.search input{width:100%;padding:13px 14px 13px 42px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font-size:15px}
+.search input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 4px rgba(11,143,122,.12)}
+.search::before{content:"🔍";position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;padding:9px 15px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.docs{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.doc{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--sh);transition:transform .25s var(--ease),box-shadow .25s}
+.doc:hover{transform:translateY(-4px);box-shadow:var(--sh2)}
+.doc .ph{position:relative;aspect-ratio:4/3.4;background:linear-gradient(135deg,var(--soft),#e3eef6);overflow:hidden}
+.doc .ph img{width:100%;height:100%;object-fit:cover;object-position:top}
+.doc .ph .ini{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:800;color:var(--brand)}
+.doc .tag{position:absolute;left:12px;top:12px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.92);font-size:12px;font-weight:700;color:var(--ok)}
+.doc .tag.away{color:var(--warn)}
+.doc .bd{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.doc h3{font-size:17px}
+.doc .sp{align-self:flex-start;padding:4px 10px;border-radius:8px;background:var(--soft);color:#08624f;font-size:12.5px;font-weight:600}
+.doc .bio{font-size:13px;color:var(--muted);margin:0}
+.doc .ft{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:10px;border-top:1px dashed var(--line)}
+.doc .price{font-size:22px;font-weight:800}
+.doc .price small{font-size:12px;color:var(--muted);font-weight:500}
+.doc .ft .btn{padding:11px 16px;font-size:14px}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:36px;background:#fff;border:1px dashed var(--line);border-radius:20px}
+.av{border-radius:50%;overflow:hidden;background:var(--soft);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--brand)}
+.av img{width:100%;height:100%;object-fit:cover;object-position:top}
+.sk{background:linear-gradient(90deg,#eef3f5,#f8fafb,#eef3f5);background-size:200% 100%;animation:sk 1.2s infinite;border-radius:22px;height:340px}
+@keyframes sk{to{background-position:-200% 0}}
+
+.check{display:grid;gap:18px;align-items:center;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:28px;padding:28px}
+@media(min-width:820px){.check{grid-template-columns:1fr 1fr;padding:40px}}
+.check h2{font-size:clamp(22px,4vw,30px);font-weight:800}
+.check p{color:#cfe4ec;margin:8px 0 0}
+.check form{display:flex;gap:8px;flex-wrap:wrap}
+.check input{flex:1 1 180px;padding:14px;border-radius:14px;border:0;font-size:16px;text-transform:uppercase;letter-spacing:.06em}
+.check .res{grid-column:1/-1}
+.mine{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.mine button{padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-size:12.5px}
+
+.contact{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.ct{display:flex;align-items:center;gap:14px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:20px;text-decoration:none;box-shadow:var(--sh);transition:transform .2s var(--ease)}
+a.ct:hover{transform:translateY(-3px)}
+.ct .ic{width:48px;height:48px;flex:0 0 auto;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--soft)}
+.ct small{display:block;color:var(--muted);font-size:12px}
+.ct b{display:block;font-size:15px;word-break:break-word}
+footer{background:var(--navy);color:#a9c2cf;padding:34px 0 calc(34px + env(safe-area-inset-bottom));font-size:13.5px;margin-top:20px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+footer .brand b{color:#fff}
+footer a{color:#fff}
+
+/* booking sheet */
+.ov{position:fixed;inset:0;z-index:80;background:rgba(10,25,36,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.ov.open{opacity:1;pointer-events:auto}
+.sheet{width:100%;max-width:560px;max-height:94vh;overflow:auto;background:#fff;border-radius:26px 26px 0 0;padding:8px 20px calc(22px + env(safe-area-inset-bottom));transform:translateY(40px);transition:transform .3s var(--ease);box-shadow:var(--sh2)}
+.ov.open .sheet{transform:none}
+@media(min-width:640px){.ov{align-items:center}.sheet{border-radius:26px;max-height:90vh}}
+.grab{width:42px;height:5px;border-radius:9px;background:#d5dfe4;margin:6px auto 12px}
+.sh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sh-top h3{font-size:19px;font-weight:800}
+.x{width:38px;height:38px;border-radius:50%;border:0;background:var(--bg);font-size:18px}
+.prog{display:flex;gap:6px;margin-bottom:18px}
+.prog div{flex:1;text-align:center;font-size:12px;font-weight:700;color:var(--muted)}
+.prog div i{display:block;height:5px;border-radius:9px;background:var(--line);margin-bottom:6px;transition:background .3s}
+.prog div.on{color:var(--brand)}.prog div.on i{background:var(--brand)}
+.pick{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:var(--bg);margin-bottom:16px}
+.pick .av{width:52px;height:52px;flex:0 0 auto}
+.pick b{display:block}.pick small{color:var(--muted)}
+.pick .fee{margin-left:auto;font-size:20px;font-weight:800;color:var(--brand)}
+.f{display:grid;gap:5px;margin-bottom:12px}
+.f label{font-size:13px;font-weight:700;color:var(--ink2)}
+.f input,.f select,.f textarea{width:100%;padding:13px 14px;border-radius:13px;border:1.5px solid var(--line);background:#fbfdfd;font-size:16px}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--brand);background:#fff;box-shadow:0 0 0 4px rgba(11,143,122,.12)}
+.f .err{color:var(--bad);font-size:12.5px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg button{padding:12px;border-radius:13px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:14px}
+.seg button.on{border-color:var(--brand);background:var(--soft);color:#08624f}
+.sum{border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:14px}
+.sum div{display:flex;justify-content:space-between;gap:12px;padding:11px 14px;font-size:14px;border-bottom:1px solid var(--line)}
+.sum div:last-child{border:0;background:var(--soft);font-size:16px;font-weight:800;color:#08624f}
+.sum span{color:var(--muted)}
+.sum b{text-align:right}
+.note{font-size:13px;color:var(--ink2);background:#f1f7fb;border-radius:14px;padding:12px 14px;margin-bottom:14px}
+.acts{display:flex;gap:10px}
+.acts .btn{flex:1}
+.alert{padding:12px 14px;border-radius:13px;background:#fdecee;color:#9b2c35;font-size:14px;margin-bottom:12px}
+
+.ticket{position:relative;border-radius:22px;overflow:hidden;background:linear-gradient(160deg,var(--navy),var(--navy2));color:#fff;margin-bottom:14px}
+.tk-h{padding:18px 18px 14px;display:flex;align-items:center;gap:12px}
+.tk-h img{width:40px;height:40px;border-radius:11px}
+.tk-h b{display:block}.tk-h small{color:#a9c2cf}
+.tk-q{text-align:center;padding:6px 18px 16px}
+.tk-q small{color:#a9c2cf;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.tk-q b{display:block;font-size:64px;line-height:1;font-weight:800}
+.tk-cut{position:relative;border-top:2px dashed rgba(255,255,255,.25);margin:0 16px}
+.tk-cut::before,.tk-cut::after{content:"";position:absolute;top:-13px;width:24px;height:24px;border-radius:50%;background:#fff}
+.tk-cut::before{left:-30px}.tk-cut::after{right:-30px}
+.tk-g{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 18px 18px}
+.tk-g small{display:block;color:#a9c2cf;font-size:11.5px}
+.tk-g b{font-size:15px}
+.st{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.st.pending{background:#fff4d6;color:#8a5a00}.st.paid{background:#dcf5e8;color:#0e7a4c}.st.arrived{background:#dbeafe;color:#1d4ed8}.st.cancelled{background:#fde2e4;color:#9b2c35}
+.paybox{border:2px solid var(--brand);border-radius:18px;padding:16px;margin-bottom:12px;text-align:center}
+.paybox .code{font-size:22px;font-weight:800;letter-spacing:.04em;margin:6px 0 12px;word-break:break-all}
+
+.wa-fab{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:50;width:58px;height:58px;border-radius:50%;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(37,211,102,.45);text-decoration:none}
+.wa-fab svg{width:30px;height:30px}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 18px;border-radius:14px;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:99;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.demo{position:fixed;left:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:45;background:#fff3cd;color:#7a5800;border:1px solid #f0d78a;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:999px}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+@media print{body *{visibility:hidden}.ticket,.ticket *{visibility:visible}.ticket{position:fixed;left:0;top:0;width:360px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="icon-192.png" alt=""><span><b id="hName">Baxnaano Hospital</b><small id="hTag">Treatment and beyond</small></span></a>
+    <nav class="nav"><a href="#dhakhaatiirta">Dhakhaatiirta</a><a href="#sida">Sida loo ballansado</a><a href="#hubi">Hubi ballan</a><a href="#xiriir">Xiriir</a></nav>
+    <a class="call" id="hCall" href="#xiriir">📞 <span>Wac</span></a>
+  </div>
+</header>
+<div class="annc" id="annc" hidden></div>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="badge"><span class="dot" id="openDot"></span><span id="openTxt">Ballan online ah</span></span>
+      <h1>Ballanso dhakhtarkaaga <em>adigoo meel kasta jooga</em></h1>
+      <p class="lead">Dooro dhakhtarka, geli xogta bukaanka, kuna bixi taleefankaaga. Lambarkaaga safka iyo waqtigaaga isla markiiba ayaad helaysaa.</p>
+      <div class="cta">
+        <a class="btn btn-white" href="#dhakhaatiirta">🩺 Ballanso hadda</a>
+        <a class="btn btn-ghost" href="#hubi">🔎 Hubi ballankaaga</a>
+      </div>
+      <div class="hero-meta">
+        <div><b id="mDocs">–</b>Dhakhaatiir</div>
+        <div><b id="mSpecs">–</b>Takhasusyo</div>
+        <div><b id="mHours">–</b>Saacadaha</div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hc-title">⚡ Ballan degdeg ah</div>
+      <div class="hc-docs" id="heroDocs"><div class="sk" style="height:66px"></div><div class="sk" style="height:66px"></div><div class="sk" style="height:66px"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="sida">
+  <div class="wrap">
+    <div class="sec-h rv"><span class="kick">3 tallaabo</span><h2>Sida loo ballansado</h2><p>Ballankaagu wuxuu qaadanayaa hal daqiiqo keliya.</p></div>
+    <div class="steps">
+      <div class="step rv"><div class="n">1</div><h3>Dooro dhakhtar</h3><p>Raadi takhasuska aad u baahan tahay oo dooro dhakhtarka.</p></div>
+      <div class="step rv"><div class="n">2</div><h3>Xogta bukaanka</h3><p>Geli magaca, taleefanka, da'da iyo jinsiga bukaanka.</p></div>
+      <div class="step rv"><div class="n">3</div><h3>Xaqiiji &amp; bixi</h3><p>Hel lambarka safka, kadibna ku bixi taleefankaaga (USSD).</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="dhakhaatiirta" style="padding-top:10px">
+  <div class="wrap">
+    <div class="sec-h rv"><span class="kick">Dhakhaatiirta</span><h2>Dooro dhakhtarkaaga</h2><p>Dhakhaatiir khibrad leh oo diyaar kuu ah.</p></div>
+    <div class="tools"><div class="search"><input id="q" type="search" placeholder="Raadi dhakhtar ama takhasus…" aria-label="Raadi"></div></div>
+    <div class="chips" id="chips"></div>
+    <div class="docs" id="docs" style="margin-top:14px"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="hubi" style="padding-top:20px">
+  <div class="wrap">
+    <div class="check rv">
+      <div><span class="kick" style="color:#5eead4">Hubi</span><h2>Hubi ballankaaga</h2><p>Geli lambarka ballanka (tusaale: BX-3F9A2C) si aad u aragto waqtiga iyo xaaladda.</p>
+        <div class="mine" id="mine"></div></div>
+      <form id="chkForm"><input id="chkRef" placeholder="BX-XXXXXX" autocomplete="off" maxlength="9"><button class="btn btn-white" type="submit">Hubi</button></form>
+      <div class="res" id="chkRes"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="xiriir" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sec-h rv"><span class="kick">Xiriir</span><h2>Nala soo xiriir</h2><p id="addrTxt"></p></div>
+    <div class="contact" id="contact"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand"><img src="icon-192.png" alt=""><span><b id="fName">Baxnaano Hospital</b><small id="fTag">Treatment and beyond</small></span></div>
+    <div id="fCopy"></div>
+  </div>
+</footer>
+
+<a class="wa-fab" id="waFab" href="#" target="_blank" rel="noopener" aria-label="WhatsApp" hidden><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3M12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2c2.6 0 5.1 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.8 9.8M20.5 3.5C18.2 1.2 15.2 0 12 0 5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6c1.8 1 3.8 1.5 5.8 1.5 6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.4"/></svg></a>
+<div class="demo" id="demoTag" hidden>DEMO — xogtu kaliya browser-kan ayay ku jirtaa</div>
+<div class="toast" id="toast"></div>
+
+<!-- BOOKING SHEET -->
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+  <div class="sheet">
+    <div class="grab"></div>
+    <div class="sh-top"><h3 id="shTitle">Ballan cusub</h3><button class="x" id="shClose" aria-label="Xir">✕</button></div>
+    <div class="prog" id="prog"><div class="on"><i></i>Dhakhtar</div><div><i></i>Xogta</div><div><i></i>Xaqiiji</div></div>
+    <div id="shBody"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="api.js"></script>
+<script>
+(function(){
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const WEEK = ['Axad','Isniin','Talaado','Arbaco','Khamiis','Jimce','Sabti'];
+const DISTRICTS = ['Hodan','Howlwadaag','Wadajir','Warta Nabadda','Waaberi','Shangaani','Xamar Weyne','Xamar Jajab','Boondheere','Cabdicasiis','Shibis','Kaaraan','Yaaqshiid','Heliwaa','Dayniile','Dharkenley','Kaxda','Garasbaaley','Gubadley','Mid kale'];
+let S = BX.DEFAULT_SETTINGS, DOCS = [], spec = 'all', B = null, step = 1;
+
+function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 3200); }
+function t12(t){ const [h,m] = BX.hm(t).split(':').map(Number); if (isNaN(h)) return t; return `${((h+11)%12)+1}:${String(m).padStart(2,'0')} ${h>=12?'PM':'AM'}`; }
+function fdate(d){ if(!d) return ''; const x = new Date(d+'T00:00:00Z'); const today = BX.mogNow().date; const rel = d === today ? 'Maanta, ' : d === BX.addDays(today,1) ? 'Berri, ' : ''; return rel + WEEK[x.getUTCDay()] + ' ' + x.getUTCDate() + '/' + (x.getUTCMonth()+1) + '/' + x.getUTCFullYear(); }
+const fee = (n) => '$' + (Number(n)%1 ? Number(n).toFixed(2) : Number(n));
+const short = (s) => String(s||'').replace(/\s*\([^)]*\)/g,'').trim() || s;
+const ini = (n) => String(n||'').replace(/^dr\.?\s*/i,'').split(/\s+/).slice(0,2).map((w) => w[0]||'').join('').toUpperCase();
+const avatar = (d) => d.photo_url ? `<img src="${esc(d.photo_url)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${esc(ini(d.name))}'}))">` : esc(ini(d.name));
+const waNum = () => String(S.whatsapp||'').replace(/\D/g,'');
+const fmtPhone = (p) => { const d = String(p||'').replace(/\D/g,''); return /^252\d{9}$/.test(d) ? `+252 ${d.slice(3,5)} ${d.slice(5,8)} ${d.slice(8)}` : (/^0\d{9}$/.test(d) ? `${d.slice(0,4)} ${d.slice(4,7)} ${d.slice(7)}` : p); };
+const phones = () => (S.phones && S.phones.length ? S.phones : (waNum() ? ['+'+waNum()] : []));
+const worksToday = (d) => (d.work_days||[0,1,2,3,4,5,6]).includes(BX.mogNow().dow);
+function isOpenNow(){ if(!S.booking_open) return false; return true; }
+
+/* ---------- render ---------- */
+function renderChrome(){
+  document.title = `Ballan Dhakhtar — ${S.hospital_name}`;
+  ['hName','fName'].forEach((i) => $(i).textContent = S.hospital_name);
+  ['hTag','fTag'].forEach((i) => $(i).textContent = S.tagline);
+  $('annc').hidden = !S.announcement; $('annc').textContent = S.announcement ? '📢 ' + S.announcement : '';
+  $('openDot').classList.toggle('off', !S.booking_open);
+  $('openTxt').textContent = S.booking_open ? 'Ballan online ah — hadda waa furan yahay' : 'Ballamaha online-ka hadda waa xidhan yihiin';
+  $('mHours').textContent = `${t12(S.open_time).replace(':00','')} – ${t12(S.close_time).replace(':00','')}`;
+  const ph = phones();
+  $('hCall').href = ph.length ? 'tel:' + ph[0].replace(/[^\d+]/g,'') : '#xiriir';
+  const wa = waNum(); $('waFab').hidden = !wa;
+  if (wa) $('waFab').href = `https://wa.me/${wa}?text=${encodeURIComponent('Salaan ' + S.hospital_name + ', waxaan rabaa ballan.')}`;
+  $('addrTxt').textContent = S.address ? '📍 ' + S.address : '';
+  const c = [];
+  ph.forEach((p) => c.push(`<a class="ct" href="tel:${esc(p.replace(/[^\d+]/g,''))}"><span class="ic">📞</span><span><small>Wac</small><b>${esc(fmtPhone(p))}</b></span></a>`));
+  if (wa) c.push(`<a class="ct" href="https://wa.me/${wa}" target="_blank" rel="noopener"><span class="ic" style="background:#dcfce7">💬</span><span><small>WhatsApp</small><b>${esc(fmtPhone(wa))}</b></span></a>`);
+  if (S.email) c.push(`<a class="ct" href="mailto:${esc(S.email)}"><span class="ic">✉️</span><span><small>Email</small><b>${esc(S.email)}</b></span></a>`);
+  if (S.address) c.push(`<a class="ct" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(S.hospital_name+' '+S.address)}" target="_blank" rel="noopener"><span class="ic">📍</span><span><small>Goobta</small><b>${esc(S.address)}</b></span></a>`);
+  c.push(`<div class="ct"><span class="ic">🕗</span><span><small>Saacadaha shaqada</small><b>${t12(S.open_time)} – ${t12(S.close_time)}</b></span></div>`);
+  $('contact').innerHTML = c.join('');
+  $('fCopy').innerHTML = `© ${new Date().getFullYear()} ${esc(S.hospital_name)} · Muqdisho`;
+}
+function renderHeroDocs(){
+  $('mDocs').textContent = DOCS.length;
+  $('mSpecs').textContent = new Set(DOCS.map((d) => d.specialty)).size;
+  $('heroDocs').innerHTML = DOCS.slice(0,3).map((d) => `<button class="hc-doc" data-id="${d.id}"><span class="av">${avatar(d)}</span><span><b>${esc(d.name)}</b><small>${esc(short(d.specialty))}</small></span><span class="fee">${fee(d.fee)}</span></button>`).join('')
+    || '<div style="color:#cfe4ec;font-size:14px">Dhakhaatiirta waa la soo rarayaa…</div>';
+}
+function renderChips(){
+  const specs = [...new Set(DOCS.map((d) => d.specialty))];
+  $('chips').hidden = specs.length < 2;
+  $('chips').innerHTML = [`<button class="chip ${spec==='all'?'on':''}" data-s="all">Dhammaan</button>`].concat(specs.map((s) => `<button class="chip ${spec===s?'on':''}" data-s="${esc(s)}">${esc(short(s))}</button>`)).join('');
+}
+function renderDocs(){
+  const q = $('q').value.trim().toLowerCase();
+  const list = DOCS.filter((d) => (spec === 'all' || d.specialty === spec) && (!q || (d.name+' '+d.specialty).toLowerCase().includes(q)));
+  $('docs').innerHTML = list.map((d) => {
+    const today = worksToday(d);
+    const days = (d.work_days||[]).length === 7 ? 'Maalin kasta' : (d.work_days||[]).map((x) => WEEK[x]).join(', ');
+    return `<article class="doc rv in">
+      <div class="ph">${d.photo_url ? `<img src="${esc(d.photo_url)}" alt="${esc(d.name)}" loading="lazy" onerror="this.remove()">` : ''}<span class="ini" ${d.photo_url?'style="z-index:-1"':''}>${esc(ini(d.name))}</span>
+        <span class="tag ${today?'':'away'}">${today ? '● Maanta wuu joogaa' : '○ Maanta ma joogo'}</span></div>
+      <div class="bd"><h3>${esc(d.name)}</h3><span class="sp">${esc(d.specialty)}</span>
+        ${d.bio ? `<p class="bio">${esc(d.bio)}</p>` : ''}<p class="bio">📅 ${esc(days)}</p>
+        <div class="ft"><div class="price">${fee(d.fee)} <small>/ballan</small></div><button class="btn btn-main" data-id="${d.id}">Ballanso</button></div></div>
+    </article>`; }).join('') || `<div class="empty">🩺 ${DOCS.length ? 'Dhakhtar ku habboon lama helin.' : 'Hadda dhakhtar diyaar ah ma jiro.'}</div>`;
+}
+
+/* ---------- booking sheet ---------- */
+function openBook(id){
+  const d = DOCS.find((x) => x.id === id); if (!d) return;
+  if (!S.booking_open){ toast('Ballamaha online-ka hadda waa xidhan yihiin. Fadlan wac isbitaalka.'); return; }
+  B = { doctor: d, name:'', phone:'', age:'', gender:'', district:'', returning:false, notes:'' };
+  step = 2; renderSheet(); $('ov').classList.add('open'); document.body.style.overflow = 'hidden';
+  setTimeout(() => { const n = $('fName_'); if (n) n.focus(); }, 320);
+}
+function closeBook(){ $('ov').classList.remove('open'); document.body.style.overflow = ''; }
+function setProg(n){ [...$('prog').children].forEach((c,i) => c.classList.toggle('on', i < n)); $('prog').hidden = n > 3; }
+function pickHTML(d){ return `<div class="pick"><span class="av">${avatar(d)}</span><span><b>${esc(d.name)}</b><small>${esc(d.specialty)}</small></span><span class="fee">${fee(d.fee)}</span></div>`; }
+function renderSheet(err){
+  const d = B.doctor; setProg(step);
+  if (step === 2){
+    $('shTitle').textContent = 'Xogta bukaanka';
+    $('shBody').innerHTML = pickHTML(d) + (err ? `<div class="alert">${esc(err)}</div>` : '') + `
+      <div class="f"><label for="fName_">Magaca bukaanka oo dhammaystiran</label><input id="fName_" autocomplete="name" placeholder="Tusaale: Cali Xasan Maxamed" value="${esc(B.name)}"></div>
+      <div class="row2">
+        <div class="f"><label for="fPhone">Taleefanka</label><input id="fPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="061xxxxxxx" value="${esc(B.phone)}"></div>
+        <div class="f"><label for="fAge">Da'da</label><input id="fAge" type="number" inputmode="numeric" min="0" max="120" placeholder="Tusaale: 28" value="${esc(B.age)}"></div>
+      </div>
+      <div class="f"><label>Jinsiga</label><div class="seg" id="fGender"><button type="button" data-v="male" class="${B.gender==='male'?'on':''}">👨 Lab</button><button type="button" data-v="female" class="${B.gender==='female'?'on':''}">👩 Dhedig</button></div></div>
+      <div class="f"><label for="fDist">Degmada</label><select id="fDist"><option value="">— Dooro —</option>${DISTRICTS.map((x) => `<option ${B.district===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      <div class="f"><label>Horay ma u timid isbitaalka?</label><div class="seg" id="fRet"><button type="button" data-v="0" class="${!B.returning?'on':''}">🆕 Maya, markii ugu horreysay</button><button type="button" data-v="1" class="${B.returning?'on':''}">✅ Haa</button></div></div>
+      <div class="f"><label for="fNotes">Sababta booqashada (ikhtiyaari)</label><textarea id="fNotes" rows="2" placeholder="Tusaale: madax xanuun">${esc(B.notes)}</textarea></div>
+      <div class="acts"><button class="btn btn-line" id="bBack">Dib</button><button class="btn btn-main" id="bNext">Sii wad →</button></div>`;
+    $('fGender').onclick = (e) => { const b = e.target.closest('button'); if (!b) return; B.gender = b.dataset.v; [...$('fGender').children].forEach((x) => x.classList.toggle('on', x === b)); };
+    $('fRet').onclick = (e) => { const b = e.target.closest('button'); if (!b) return; B.returning = b.dataset.v === '1'; [...$('fRet').children].forEach((x) => x.classList.toggle('on', x === b)); };
+    $('bBack').onclick = closeBook;
+    $('bNext').onclick = () => {
+      B.name = $('fName_').value.trim(); B.phone = $('fPhone').value.trim(); B.age = $('fAge').value.trim(); B.district = $('fDist').value; B.notes = $('fNotes').value.trim();
+      const ph = BX.normPhone(B.phone);
+      const e = B.name.split(/\s+/).filter(Boolean).length < 2 ? 'Fadlan geli magaca bukaanka (ugu yaraan 2 magac).'
+        : (ph.length < 9 || ph.length > 13) ? 'Fadlan geli lambar taleefan sax ah (tusaale: 0615123456).'
+        : (B.age === '' || +B.age < 0 || +B.age > 120) ? "Fadlan geli da'da bukaanka."
+        : !B.gender ? 'Fadlan dooro jinsiga.' : null;
+      if (e){ renderSheet(e); return; }
+      step = 3; renderSheet();
+    };
+  } else if (step === 3){
+    $('shTitle').textContent = 'Xaqiiji ballanka';
+    $('shBody').innerHTML = pickHTML(d) + (err ? `<div class="alert">${esc(err)}</div>` : '') + `
+      <div class="sum">
+        <div><span>Bukaanka</span><b>${esc(B.name.toUpperCase())}</b></div>
+        <div><span>Taleefanka</span><b>${esc(BX.normPhone(B.phone))}</b></div>
+        <div><span>Da'da / Jinsiga</span><b>${esc(B.age)} sano · ${B.gender==='male'?'Lab':'Dhedig'}</b></div>
+        ${B.district ? `<div><span>Degmada</span><b>${esc(B.district)}</b></div>` : ''}
+        <div><span>Lacagta</span><b>${fee(d.fee)}</b></div>
+      </div>
+      <div class="note">🕗 Waqtiga iyo lambarka safka waxaa si toos ah laguu siinayaa marka aad xaqiijiso. Lacagta ku bix taleefankaaga (USSD).</div>
+      <div class="acts"><button class="btn btn-line" id="bBack">Dib</button><button class="btn btn-main" id="bOk">✅ Xaqiiji ballanka</button></div>`;
+    $('bBack').onclick = () => { step = 2; renderSheet(); };
+    $('bOk').onclick = async (ev) => {
+      const btn = ev.currentTarget; btn.disabled = true; btn.textContent = 'Waa la diraya…';
+      try {
+        const r = await BX.book({ doctor_id: d.id, name: B.name, phone: B.phone, age: B.age, gender: B.gender, district: B.district, returning: B.returning, notes: B.notes });
+        B.result = r; remember(r); step = 4; renderSheet();
+      } catch (e) { renderSheet(e.message); }
+    };
+  } else {
+    const r = B.result; $('shTitle').textContent = 'Ballanka waa diyaar ✅';
+    const code = `${S.ussd_prefix || '*712*'}${String(S.ussd_number||'').replace(/\D/g,'')}*${Number(r.fee)}#`;
+    $('shBody').innerHTML = ticketHTML(r) + `
+      <div class="paybox"><b>💳 Bixi ${fee(r.fee)} hadda</b><div class="code">${esc(code)}</div>
+        <a class="btn btn-main block" href="tel:${encodeURIComponent(code)}">📲 Bixi hadda</a>
+        <div style="font-size:12.5px;color:var(--muted);margin-top:8px">Marka wicitaanku furmo riix <b>Call</b>, kadibna geli PIN-kaaga.</div></div>
+      <div class="acts" style="margin-bottom:10px">
+        <a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/${waNum()}?text=${encodeURIComponent(`Ballan: ${r.ref}\nBukaan: ${r.patient}\nDhakhtar: ${r.doctor}\nTaariikh: ${fdate(r.date)} ${t12(r.time)}\nSafka: #${r.queue}\nLacag: ${fee(r.fee)} — waan bixiyay`)}">💬 U dir WhatsApp</a>
+        <button class="btn btn-line" onclick="window.print()">🖨️ Daabac</button></div>
+      <p style="font-size:13px;color:var(--muted);text-align:center;margin:0 0 10px">Kaydi lambarka <b>${esc(r.ref)}</b> si aad ballankaaga u hubiso.</p>
+      <button class="btn btn-line block" id="bDone">Dhammee</button>`;
+    $('bDone').onclick = closeBook;
+  }
+}
+function ticketHTML(r){
+  const lbl = { pending:'⏳ Lacag sugaya', paid:'✅ La bixiyay', arrived:'🏥 Wuu yimid', cancelled:'✕ La joojiyay' }[r.status] || r.status;
+  return `<div class="ticket"><div class="tk-h"><img src="icon-192.png" alt=""><span><b>${esc(S.hospital_name)}</b><small>Ballan ${esc(r.ref)}</small></span><span class="st ${esc(r.status)}" style="margin-left:auto">${lbl}</span></div>
+    <div class="tk-q"><small>Lambarka safka</small><b>#${esc(r.queue)}</b></div><div class="tk-cut"></div>
+    <div class="tk-g"><div><small>Bukaanka</small><b>${esc(r.patient)}</b></div><div><small>Dhakhtarka</small><b>${esc(r.doctor)}</b></div>
+    <div><small>Taariikhda</small><b>${esc(fdate(r.date))}</b></div><div><small>Waqtiga</small><b>${esc(t12(r.time))}</b></div>
+    <div><small>Takhasuska</small><b>${esc(short(r.specialty))}</b></div><div><small>Lacagta</small><b>${fee(r.fee)}</b></div></div></div>`;
+}
+
+/* ---------- check booking ---------- */
+function myRefs(){ try { return JSON.parse(localStorage.getItem('bx_my_refs')) || []; } catch(e){ return []; } }
+function remember(r){ const l = myRefs().filter((x) => x.ref !== r.ref); l.unshift({ ref: r.ref, date: r.date }); try { localStorage.setItem('bx_my_refs', JSON.stringify(l.slice(0,5))); } catch(e){} renderMine(); }
+function renderMine(){ const l = myRefs(); $('mine').innerHTML = l.length ? '<span style="font-size:12.5px;color:#a9c2cf;width:100%">Ballamadaada:</span>' + l.map((x) => `<button type="button" data-ref="${esc(x.ref)}">${esc(x.ref)}</button>`).join('') : ''; }
+async function check(ref){
+  ref = String(ref||'').trim().toUpperCase(); if (!ref) return;
+  if (!/^BX-/.test(ref)) ref = 'BX-' + ref.replace(/^BX/,'');
+  $('chkRef').value = ref; $('chkRes').innerHTML = '<div style="color:#cfe4ec">Waa la raadinayaa…</div>';
+  try { const r = await BX.lookup(ref); $('chkRes').innerHTML = r ? `<div style="max-width:420px">${ticketHTML(r)}</div>` : '<div style="color:#fecaca">Ballankan lama helin. Hubi lambarka.</div>'; }
+  catch(e){ $('chkRes').innerHTML = `<div style="color:#fecaca">${esc(e.message)}</div>`; }
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-id]'); if (b){ openBook(b.dataset.id); return; }
+  const c = e.target.closest('.chip'); if (c){ spec = c.dataset.s; renderChips(); renderDocs(); return; }
+  const m = e.target.closest('#mine button'); if (m){ check(m.dataset.ref); }
+});
+$('q').addEventListener('input', renderDocs);
+$('shClose').onclick = closeBook;
+$('ov').addEventListener('click', (e) => { if (e.target.id === 'ov') closeBook(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBook(); });
+$('chkForm').addEventListener('submit', (e) => { e.preventDefault(); check($('chkRef').value); });
+
+const io = 'IntersectionObserver' in window ? new IntersectionObserver((es) => es.forEach((x) => { if (x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }), { threshold: .1 }) : null;
+document.querySelectorAll('.rv').forEach((el) => io ? io.observe(el) : el.classList.add('in'));
+
+async function boot(){
+  $('demoTag').hidden = BX.LIVE;
+  renderChrome(); renderMine();
+  try { S = await BX.settings(); renderChrome(); } catch(e){ console.warn(e); }
+  try { DOCS = await BX.doctors(); } catch(e){ DOCS = []; $('docs').innerHTML = `<div class="empty">⚠️ ${esc(e.message)}</div>`; }
+  renderHeroDocs(); renderChips(); if (DOCS.length || !$('docs').querySelector('.empty')) renderDocs();
+  const ref = new URLSearchParams(location.search).get('ref'); if (ref){ location.hash = 'hubi'; check(ref); }
+}
+boot();
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+})();
+</script>
+</body>
+</html>
