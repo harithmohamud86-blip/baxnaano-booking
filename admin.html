@@ -123,7 +123,7 @@ tr:last-child td{border:0}
           <input class="grow" id="fQ" type="search" placeholder="Raadi magac, taleefan ama BX-…">
           <button class="btn btn-line" id="refresh">↻</button>
         </div>
-        <div style="overflow-x:auto"><table class="resp"><thead><tr><th>Safka</th><th>Bukaanka</th><th>Dhakhtarka</th><th>Waqtiga</th><th>Xaaladda</th><th>Odoo</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+        <div style="overflow-x:auto"><table class="resp"><thead><tr><th>Safka</th><th>Bukaanka</th><th>Dhakhtarka</th><th>Xaaladda</th><th>Odoo</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
       </div>
     </section>
 
@@ -148,7 +148,7 @@ tr:last-child td{border:0}
           <div class="f"><label>Cinwaanka</label><input id="sAddr"></div>
           <div class="f"><label>Furitaanka</label><input id="sOpenT" type="time"></div>
           <div class="f"><label>Xidhitaanka</label><input id="sClose" type="time"></div>
-          <div class="f"><label>Daqiiqado bukaan kasta</label><input id="sSlot" type="number" min="5" max="120"></div>
+          <input id="sSlot" type="hidden">
           <div class="f"><label>USSD prefix</label><input id="sUssd"></div>
           <div class="f"><label>Lambarka lacagta lagu bixiyo</label><input id="sUssdN"></div>
         </div>
@@ -187,7 +187,6 @@ tr:last-child td{border:0}
     <div class="f"><label>Kala horreynta</label><input id="dSort" type="number"></div>
     <div class="f"><label>Saacadda bilowga</label><input id="dStart" type="time"></div>
     <div class="f"><label>Saacadda dhammaadka</label><input id="dEnd" type="time"></div>
-    <div class="f"><label>Daqiiqo bukaankiiba</label><input id="dSlot" type="number" min="5" max="240" placeholder="15"></div>
   </div>
   <datalist id="specList"><option>Carruurta (Pediatrician)</option><option>Neerfaha (Neurologist)</option><option>Cudurrada Guud (General Medicine)</option><option>Haweenka &amp; Umulaha (Gynecology)</option><option>Lafaha (Orthopedics)</option><option>Wadnaha (Cardiology)</option><option>Indhaha (Ophthalmology)</option><option>Ilkaha (Dentist)</option><option>Maqaarka (Dermatology)</option><option>Dhegaha, Sanka &amp; Cunaha (ENT)</option><option>Daaweynta Hadalka (Speech Therapy)</option><option>Jimicsiga Daaweynta (Physiotherapy)</option></datalist>
   <div class="f"><label>Maalmaha uu shaqeeyo</label><div class="days" id="dDays"></div></div>
@@ -268,7 +267,6 @@ function renderRows(){
     <td class="q">#${b.queue_number}</td>
     <td class="full"><b>${esc(b.patient_name)}</b><div class="muted">${esc(b.phone)} · ${b.age ?? '–'} sano · ${b.gender==='male'?'Lab':b.gender==='female'?'Dhedig':'–'}${b.district ? ' · '+esc(b.district) : ''}${b.is_returning ? ' · horay u yimid' : ' · cusub'}</div>${b.notes ? `<div class="muted">📝 ${esc(b.notes)}</div>` : ''}<div class="muted">${esc(b.ref)}</div></td>
     <td class="full">${esc(b.doctor_name)}<div class="muted">$${Number(b.fee)}</div></td>
-    <td class="full">${t12(b.visit_time)}</td>
     <td class="full"><span class="st ${b.status}">${ST[b.status]}</span>${b.payment_method === 'waafipay' ? '<span class="auto">💳 Auto</span>' : ''}${b.paid_by ? `<div class="by">✓ ${esc(b.paid_by)} · ${WHEN(b.paid_at)}</div>` : ''}${b.updated_by && b.updated_by !== b.paid_by && b.status !== 'pending' ? `<div class="by">↻ ${esc(b.updated_by)}</div>` : ''}</td>
     <td class="full"><span class="od ${b.odoo_status}" title="${esc(b.odoo_error||'')}">${OD[b.odoo_status]||b.odoo_status}</span>${b.odoo_status==='error' ? ` <button class="btn btn-line sm" data-odoo="${b.id}">↻</button>` : ''}</td>
     <td class="full"><div class="acts">
@@ -276,8 +274,8 @@ function renderRows(){
       ${b.status==='paid' ? `<button class="btn btn-blue sm" data-s="arrived" data-id="${b.id}">🏥 Yimid</button>` : ''}
       ${b.status!=='cancelled' && b.status!=='arrived' ? `<button class="btn btn-bad sm" data-s="cancelled" data-id="${b.id}">✕</button>` : ''}
       <button class="btn btn-line sm" data-rx="${b.id}" title="Rasiid PDF">📄</button><button class="btn btn-line sm" data-log="${b.id}" title="Taariikhda">🕘</button>
-      <a class="btn btn-line sm" target="_blank" rel="noopener" href="https://wa.me/252${esc(String(b.phone).replace(/^0/,''))}?text=${encodeURIComponent(`Salaan ${b.patient_name}, ballankaaga ${b.ref} ee ${b.doctor_name}: ${t12(b.visit_time)}, safka #${b.queue_number}. ${S.hospital_name}`)}">💬</a>
-    </div></td></tr>`).join('') || `<tr><td colspan="7" class="empty">Ballan lama helin maalintan.</td></tr>`;
+      <a class="btn btn-line sm" target="_blank" rel="noopener" href="https://wa.me/252${esc(String(b.phone).replace(/^0/,''))}?text=${encodeURIComponent(`Salaan ${b.patient_name}, ballankaaga ${b.ref} ee ${b.doctor_name}: ${b.visit_date}, safka #${b.queue_number}. ${S.hospital_name}`)}">💬</a>
+    </div></td></tr>`).join('') || `<tr><td colspan="6" class="empty">Ballan lama helin maalintan.</td></tr>`;
 }
 ['fDoc','fSt'].forEach((i) => $(i).onchange = renderRows);
 $('fQ').oninput = renderRows;
@@ -289,7 +287,7 @@ $('rows').onclick = async (e) => {
       $('logT').textContent = `${x.ref} · ${x.patient_name}`;
       $('logL').innerHTML = L.map((l) => `<li><b>${ACT[l.action] || esc(l.action)}</b><br><small>${esc(l.by_who || '—')} · ${WHEN(l.at)}</small></li>`).join('') || '<li>—</li>'; $('logOv').hidden = false; } catch(err){ toast(err.message); } return; }
   if (b.dataset.rx){ const x = ROWS.find((r) => r.id === b.dataset.rx); if (!x) return; b.disabled = true;
-    try { await BXReceipt.pdf({ ref:x.ref, patient:x.patient_name, phone:x.phone, age:x.age, gender:x.gender, district:x.district, returning:x.is_returning, doctor:x.doctor_name, specialty:x.specialty, date:x.visit_date, time:x.visit_time, queue:x.queue_number, fee:x.fee, status:x.status, paid_at:x.paid_at, created_at:x.created_at }, S); } catch(err){ toast(err.message); }
+    try { await BXReceipt.pdf({ ref:x.ref, patient:x.patient_name, phone:x.phone, age:x.age, gender:x.gender, district:x.district, returning:x.is_returning, doctor:x.doctor_name, specialty:x.specialty, date:x.visit_date, time:x.visit_time, queue:x.queue_number, start:(DOCS.find((d) => d.id === x.doctor_id) || {}).start_time, end:(DOCS.find((d) => d.id === x.doctor_id) || {}).end_time, fee:x.fee, status:x.status, paid_at:x.paid_at, created_at:x.created_at }, S); } catch(err){ toast(err.message); }
     b.disabled = false; return; }
   b.disabled = true;
   try {
@@ -313,7 +311,7 @@ function openDoc(d){
   $('docTitle').textContent = d ? 'Wax ka beddel dhakhtarka' : 'Dhakhtar cusub';
   $('dName').value = editing.name; $('dSpec').value = editing.specialty; $('dFee').value = editing.fee; $('dLimit').value = editing.daily_limit;
   $('dOdoo').value = editing.odoo_doctor_id ?? ''; $('dSort').value = editing.sort_order ?? 0; $('dBio').value = editing.bio || ''; $('dActive').checked = editing.active !== false;
-  $('dStart').value = (editing.start_time||'').slice(0,5); $('dEnd').value = (editing.end_time||'').slice(0,5); $('dSlot').value = editing.slot_minutes ?? '';
+  $('dStart').value = (editing.start_time||'').slice(0,5); $('dEnd').value = (editing.end_time||'').slice(0,5); 
   $('dDays').innerHTML = WEEK.map((w,i) => `<label><input type="checkbox" value="${i}" ${(editing.work_days||[]).includes(i)?'checked':''}>${w}</label>`).join('');
   $('dPrev').innerHTML = av(editing); $('dUp').textContent = ''; $('docOv').hidden = false;
 }
@@ -332,7 +330,7 @@ $('docForm').onsubmit = async (e) => {
   const row = { id: editing.id, name: $('dName').value.trim(), specialty: $('dSpec').value.trim(), fee: +$('dFee').value, daily_limit: +$('dLimit').value,
     odoo_doctor_id: $('dOdoo').value ? +$('dOdoo').value : null, sort_order: +$('dSort').value || 0, bio: $('dBio').value.trim() || null,
     photo_url: editing.photo_url || null, work_days: days, active: $('dActive').checked,
-    start_time: $('dStart').value || null, end_time: $('dEnd').value || null, slot_minutes: $('dSlot').value ? +$('dSlot').value : null };
+    start_time: $('dStart').value || null, end_time: $('dEnd').value || null };
   if (row.start_time && row.end_time && row.end_time <= row.start_time){ toast('Saacadda dhammaadka waa inay ka dambeysaa bilowga'); return; }
   try { await BX.saveDoctor(row); $('docOv').hidden = true; toast('💾 Waa la kaydiyay'); DOCS = await BX.allDoctors(); renderDocs(); }
   catch(err){ toast(err.message); }

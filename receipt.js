@@ -122,7 +122,7 @@
           <div class="rx-q"><small>Lambarka Safka</small><b>#${esc(d.queue)}</b><em>Queue number</em></div>
           <div class="rx-when">
             <div><div class="rx-k">Taariikhda · Date</div><div class="rx-v">${esc(dLong(d.date))}</div></div>
-            <div><div class="rx-k">Waqtiga · Time</div><div class="rx-v">${esc(t12(d.time))}</div></div>
+            <div><div class="rx-k">Dhakhtarku joogaa · Doctor hours</div><div class="rx-v">${d.start ? esc(t12(d.start) + " – " + t12(d.end)) : "—"}</div></div>
             <div><div class="rx-k">Dhakhtarka · Doctor</div><div class="rx-v sm">${esc(d.doctor)}</div></div>
             <div><div class="rx-k">Takhasuska · Specialty</div><div class="rx-v sm">${esc(d.specialty)}</div></div>
           </div>
@@ -149,7 +149,7 @@
         </div>
 
         <div class="rx-notes">
-          <div>Imow 15 daqiiqo ka hor waqtigaaga</div><div>Arrive 15 minutes before your time</div>
+          <div>Lambar hore = hore ayaad u gelaysaa</div><div>You are seen in queue-number order</div>
           <div>Soo qaado rasiidkan (taleefan ama warqad)</div><div>Bring this receipt (phone or printed)</div>
           <div>Soo qaado warqadihii iyo daawooyinkii hore</div><div>Bring previous reports and medicines</div>
         </div>

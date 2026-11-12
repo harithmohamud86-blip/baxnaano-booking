@@ -16,7 +16,6 @@ const db = createClient(env("SUPABASE_URL"), env("SUPABASE_SERVICE_ROLE_KEY"));
 const out = (b: unknown, status = 200) => new Response(JSON.stringify(b), { status, headers: { "Content-Type": "application/json" } });
 
 const WEEK = ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimce", "Sabti"];
-const t12 = (t: string) => { const [h, m] = String(t).split(":").map(Number); return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`; };
 const day = (d: string) => { const x = new Date(d + "T00:00:00Z"); return `${WEEK[x.getUTCDay()]} ${x.getUTCDate()}/${x.getUTCMonth() + 1}`; };
 const today = () => new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10);
 
@@ -46,10 +45,10 @@ async function sendSMS(phone: string, message: string, refid: string) {
 function text(event: string, b: any, s: any) {
   const pay = `${s.ussd_prefix || "*712*"}${s.ussd_number || ""}*${Number(b.fee)}#`;
   if (event === "booked")
-    return `Baxnaano Hospital: Ballankaaga ${b.ref} waa la qabtay. ${b.doctor_name}, ${day(b.visit_date)} ${t12(b.visit_time)}, safka #${b.queue_number}. Bixi $${Number(b.fee)}: ${pay}`;
+    return `Baxnaano Hospital: Lambarka safkaagu waa #${b.queue_number} (${b.ref}), ${b.doctor_name}, ${day(b.visit_date)}. Bixi $${Number(b.fee)}: ${pay}`;
   if (event === "paid")
-    return `Baxnaano: Lacagtii ballanka ${b.ref} waa la helay. ${day(b.visit_date)} ${t12(b.visit_time)}, safka #${b.queue_number}. Fadlan kaalay 15 daqiiqo ka hor. Mahadsanid!`;
-  return `Baxnaano: Xusuusin - maanta ballankaaga ${b.ref} waa ${t12(b.visit_time)}, ${b.doctor_name}, safka #${b.queue_number}. Ku soo dhowow waqtiga. Mahadsanid!`;
+    return `Baxnaano: Lacagtii waa la helay. Safkaaga #${b.queue_number}, ${b.doctor_name}, ${day(b.visit_date)}. Ha soo kallahin - lambar hore, hore ayaad u gelaysaa. Mahadsanid!`;
+  return `Baxnaano: Maanta waa ballankaaga. Safkaaga #${b.queue_number}, ${b.doctor_name}. Zoobe KM5, ka soo horjeedka Hayat Supermarket. Mahadsanid!`;
 }
 const COL: Record<string, string> = { booked: "sms_booked_at", paid: "sms_paid_at", reminder: "sms_reminder_at" };
 

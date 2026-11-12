@@ -247,6 +247,18 @@ footer a{color:#fff}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 18px;border-radius:14px;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:99;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%)}
 .demo{position:fixed;left:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:45;background:#fff3cd;color:#7a5800;border:1px solid #f0d78a;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:999px}
+.kallah{background:linear-gradient(135deg,#fff7e6,#fdecc8);border:1px solid #f3d38b;border-radius:22px;padding:22px;display:grid;gap:18px;grid-template-columns:1.2fr 1fr;align-items:center}
+.kallah>*{min-width:0}.kallah .acts{display:flex;flex-wrap:wrap;gap:8px}.kallah .acts .btn{flex:1 1 auto}
+.kallah h2{margin:0 0 6px;font-size:clamp(22px,4vw,30px);color:#5b3a00}.kallah p{margin:0 0 12px;color:#6b4a10;line-height:1.55}
+.kallah .vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.kallah .vs div{background:#fff;border-radius:14px;padding:12px;font-size:13.5px;line-height:1.45}.kallah .vs b{display:block;font-size:14.5px;margin-bottom:2px}
+.kallah .vs .bad b{color:#b42318}.kallah .vs .good b{color:#0e7a4c}
+.areas{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 14px}.areas span{background:#fff;border:1px solid #f0d78a;border-radius:999px;padding:6px 11px;font-size:13px;font-weight:700;color:#5b3a00}
+.loc{background:var(--navy);color:#fff;border-radius:22px;padding:20px;position:relative;overflow:hidden}
+.loc .pin{font-size:34px}.loc h3{margin:6px 0 4px;font-size:20px}.loc p{margin:0 0 14px;color:#cfe4ec;line-height:1.5}
+.loc .acts{display:flex;flex-wrap:wrap;gap:8px}
+.qhint{display:flex;gap:8px;align-items:flex-start;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:14px;padding:10px 12px;font-size:13px;color:#065f46;margin:-2px 0 12px;line-height:1.45}
+@media (max-width:760px){.kallah{grid-template-columns:1fr;padding:18px}.kallah .vs{grid-template-columns:1fr}}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
@@ -256,7 +268,7 @@ footer a{color:#fff}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#"><img src="icon-192.png" alt=""><span><b id="hName">Baxnaano Hospital</b><small id="hTag">Treatment and beyond</small></span></a>
-    <nav class="nav"><a href="#dhakhaatiirta">Dhakhaatiirta</a><a href="#hubi">Hubi ballan</a><a href="#sida">Sida loo ballansado</a><a href="#xiriir">Xiriir</a></nav>
+    <nav class="nav"><a href="#dhakhaatiirta">Dhakhaatiirta</a><a href="#hubi">Hubi ballan</a><a href="#sida">Sida loo ballansado</a><a href="#goobta">Goobta</a><a href="#xiriir">Xiriir</a></nav>
     <a class="call" id="hCall" href="#xiriir">📞 <span>Wac</span></a>
   </div>
 </header>
@@ -267,7 +279,7 @@ footer a{color:#fff}
     <div>
       <span class="badge"><span class="dot" id="openDot"></span><span id="openTxt">Ballan online ah</span></span>
       <h1>Ballanso dhakhtarkaaga <em>adigoo meel kasta jooga</em></h1>
-      <p class="lead">Dooro dhakhtarka hoose, ballanso, hel lambarka safka — isla markiiba.</p>
+      <p class="lead">Ha soo kallahin! Lambarka safka gurigaaga ka qabso — lambar hore, hore ayaad u gelaysaa.</p>
       <div class="cta">
         <a class="btn btn-white" href="#dhakhaatiirta">🩺 Ballanso hadda</a>
         <a class="btn btn-ghost" href="#hubi">🔎 Hubi ballankaaga</a>
@@ -294,10 +306,43 @@ footer a{color:#fff}
   </div>
 </section>
 
+<section class="sec" id="goobta" style="padding-top:20px">
+  <div class="wrap">
+    <div class="kallah rv">
+      <div>
+        <span class="kick" style="color:#a16207">📱 Ha soo kallahin</span>
+        <h2>Safkaaga ka qabso gurigaaga</h2>
+        <p>Looma baahna inaad subax hore soo kallahdo oo saf dheer gasho. Taleefankaaga ka qabso lambarka safka, kadibna kaalay markuu lambarkaagu soo dhowaado.</p>
+        <div class="areas" aria-label="Degmooyinka">
+          <span>Balcad</span><span>Darmooleey</span><span>Kaaraan</span><span>Suuqa Xoolaha</span><span>Ceelasha Biyaha</span><span>Dharkenley</span><span>Kaxda</span><span>Hurwaa</span><span>Yaaqshiid</span><span>Wadajir</span>
+        </div>
+        <div class="vs">
+          <div class="bad"><b>❌ Hore</b>Subax hore kallah, gaadiid bixi, saacado saf ku sug.</div>
+          <div class="good"><b>✅ Hadda</b>Gurigaaga ka ballanso, lambarkaaga hel, waqtigaaga kaalay.</div>
+        </div>
+        <div class="acts" style="margin-top:14px">
+          <a class="btn btn-main" href="#dhakhaatiirta">🎫 Qabso lambarkaaga</a>
+          <button class="btn btn-wa" type="button" id="shareBtn">📤 U dir qoyskaaga</button>
+          <button class="btn btn-line" type="button" id="installBtn">📲 Ku dar taleefankaaga</button>
+        </div>
+      </div>
+      <div class="loc">
+        <div class="pin">📍</div>
+        <h3>Baxnaano Hospital</h3>
+        <p><b>Zoobe (KM5), Degmada Wadajir</b><br>Ka soo horjeedka <b>Hayat Supermarket</b>, Muqdisho</p>
+        <div class="acts">
+          <a class="btn btn-white" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Hayat+Supermarket+Zoobe+KM5+Mogadishu">🗺️ Khariidadda</a>
+          <a class="btn btn-ghost" href="#xiriir">📞 Wac</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="hubi" style="padding-top:20px">
   <div class="wrap">
     <div class="check rv">
-      <div><span class="kick" style="color:#5eead4">Hubi</span><h2>Hubi ballankaaga</h2><p>Geli lambarka ballanka (tusaale: BX-3F9A2C) si aad u aragto waqtiga iyo xaaladda.</p>
+      <div><span class="kick" style="color:#5eead4">Hubi</span><h2>Hubi ballankaaga</h2><p>Geli lambarka ballanka (tusaale: BX-3F9A2C) si aad u aragto lambarka safka iyo xaaladda.</p>
         <div class="mine" id="mine"></div></div>
       <form id="chkForm"><input id="chkRef" placeholder="BX-XXXXXX" autocomplete="off" maxlength="9"><button class="btn btn-white" type="submit">Hubi</button></form>
       <div class="res" id="chkRes"></div>
@@ -487,7 +532,7 @@ function renderSheet(err){
         ${B.district ? `<div><span>Degmada</span><b>${esc(B.district)}</b></div>` : ''}
         <div><span>Lacagta</span><b>${fee(d.fee)}</b></div>
       </div>
-      <div class="note">🕗 Waqtiga iyo lambarka safka waxaa si toos ah laguu siinayaa marka aad xaqiijiso. Lacagta ku bix taleefankaaga (USSD).</div>
+      <div class="note">🎫 Lambarka safka waxaa si toos ah laguu siinayaa marka aad xaqiijiso. Lambar hore = hore ayaad dhakhtarka u arkaysaa.</div>
       <div class="acts"><button class="btn btn-line" id="bBack">Dib</button><button class="btn btn-main" id="bOk">✅ Xaqiiji ballanka</button></div>`;
     $('bBack').onclick = () => { step = 2; renderSheet(); };
     $('bOk').onclick = async (ev) => {
@@ -500,12 +545,12 @@ function renderSheet(err){
   } else {
     const r = B.result; $('shTitle').textContent = 'Ballanka waa diyaar ✅';
     const code = `${S.ussd_prefix || '*712*'}${String(S.ussd_number||'').replace(/\D/g,'')}*${Number(r.fee)}#`;
-    $('shBody').innerHTML = ticketHTML(r) + (r.status === 'pending' ? olPayHTML(r) : '') + (r.status === 'pending' ? `
+    $('shBody').innerHTML = ticketHTML(r) + `<div class="qhint">🎫 <span>Lambarkaagu waa <b>#${esc(r.queue)}</b>. Lambar hore = hore ayaad u gelaysaa. Ha soo kallahin — kaalay markuu safku kuu soo dhowaado.</span></div>` + (r.status === 'pending' ? olPayHTML(r) : '') + (r.status === 'pending' ? `
       <div class="paybox"><b>💳 Bixi ${fee(r.fee)} hadda</b><div class="code">${esc(code)}</div>
         <a class="btn btn-main block" href="tel:${encodeURIComponent(code)}">📲 Bixi hadda</a>
         <div style="font-size:12.5px;color:var(--muted);margin-top:8px">Marka wicitaanku furmo riix <b>Call</b>, kadibna geli PIN-kaaga.</div></div>` : '') + `
       <div class="acts" style="margin-bottom:10px">
-        <a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/${waNum()}?text=${encodeURIComponent(`Ballan: ${r.ref}\nBukaan: ${r.patient}\nDhakhtar: ${r.doctor}\nTaariikh: ${fdate(r.date)} ${t12(r.time)}\nSafka: #${r.queue}\nLacag: ${fee(r.fee)} — waan bixiyay`)}">💬 U dir WhatsApp</a>
+        <a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/${waNum()}?text=${encodeURIComponent(`Ballan: ${r.ref}\nBukaan: ${r.patient}\nDhakhtar: ${r.doctor}\nTaariikh: ${fdate(r.date)}\nSafka: #${r.queue}\nLacag: ${fee(r.fee)} — waan bixiyay`)}">💬 U dir WhatsApp</a>
         <button class="btn btn-line" id="bPrint">🖨️ Daabac</button></div>
       <button class="btn btn-main block" id="bPdf" style="margin-bottom:10px">📄 Soo deji rasiidka (PDF)</button>
       <p style="font-size:13px;color:var(--muted);text-align:center;margin:0 0 10px">Kaydi lambarka <b>${esc(r.ref)}</b> si aad ballankaaga u hubiso.</p>
@@ -540,7 +585,7 @@ function ticketHTML(r){
   return `<div class="ticket"><div class="tk-h"><img src="icon-192.png" alt=""><span><b>${esc(S.hospital_name)}</b><small>Ballan ${esc(r.ref)}</small></span><span class="st ${esc(r.status)}" style="margin-left:auto">${lbl}</span></div>
     <div class="tk-q"><small>Lambarka safka</small><b>#${esc(r.queue)}</b></div><div class="tk-cut"></div>
     <div class="tk-g"><div><small>Bukaanka</small><b>${esc(r.patient)}</b></div><div><small>Dhakhtarka</small><b>${esc(r.doctor)}</b></div>
-    <div><small>Taariikhda</small><b>${esc(fdate(r.date))}</b></div><div><small>Waqtiga</small><b>${esc(t12(r.time))}</b></div>
+    <div><small>Taariikhda</small><b>${esc(fdate(r.date))}</b></div><div><small>Dhakhtarku joogaa</small><b>${r.start ? esc(t12(r.start) + ' – ' + t12(r.end)) : '—'}</b></div>
     <div><small>Takhasuska</small><b>${esc(short(r.specialty))}</b></div><div><small>Lacagta</small><b>${fee(r.fee)}</b></div></div></div>`;
 }
 
@@ -559,6 +604,21 @@ async function check(ref){
     if (r){ $('chkPdf').onclick = (e) => getPDF(r, e.currentTarget); wireOlPay(r, () => check(r.ref)); } }
   catch(e){ $('chkRes').innerHTML = `<div style="color:#fecaca">${esc(e.message)}</div>`; }
 }
+
+/* ---------- share & install ---------- */
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); installEvt = e; });
+$('shareBtn').onclick = async () => {
+  const url = location.origin + location.pathname;
+  const text = `Baxnaano Hospital — ha soo kallahin! Lambarka safka taleefankaaga ka qabso: ${url}\n📍 Zoobe (KM5), Wadajir — ka soo horjeedka Hayat Supermarket`;
+  if (navigator.share){ try { await navigator.share({ title: 'Baxnaano — Ballan online', text, url }); return; } catch(e){ if (e && e.name === 'AbortError') return; } }
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
+};
+$('installBtn').onclick = async () => {
+  if (installEvt){ installEvt.prompt(); try { await installEvt.userChoice; } catch(e){} installEvt = null; return; }
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  toast(ios ? 'iPhone: riix ⬆️ Share, kadib “Add to Home Screen”.' : 'Riix ⋮ (menu-ga browser-ka), kadib “Add to Home screen” / “Install app”.');
+};
 
 /* ---------- events ---------- */
 document.addEventListener('click', (e) => {

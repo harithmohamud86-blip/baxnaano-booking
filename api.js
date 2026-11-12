@@ -108,16 +108,16 @@
       if (!s.booking_open) throw friendly('BOOKING_CLOSED'); if (!d) throw friendly('DOCTOR_NOT_FOUND');
       if (String(p.name || '').trim().length < 3) throw friendly('BAD_NAME');
       const phone = normPhone(p.phone); if (phone.length < 7 || phone.length > 15) throw friendly('BAD_PHONE');
-      const all = load(K.b, []); const now = mogNow(); const slotH = +s.slot_minutes || 15;
+      const all = load(K.b, []); const now = mogNow();
       let date = now.date, time = null, queue = 0;
       for (let i = 0; i < 15 && !time; i++, date = addDays(date, 1)) {
         const dow = new Date(date + 'T00:00:00Z').getUTCDay(); if (!d.work_days.includes(dow)) continue;
         const day = all.filter((b) => b.doctor_id === d.id && b.visit_date === date && b.status !== 'cancelled');
         if (day.length >= d.daily_limit) continue;
-        const op = toMin(d.start_time || s.open_time), cl = toMin(d.end_time || s.close_time), slot = +d.slot_minutes || slotH;
-        let t = day.length ? Math.max(...day.map((b) => toMin(b.visit_time))) + slot : op;
-        if (date === now.date) t = Math.max(t, op + Math.max(0, Math.ceil((now.min - op) / slot)) * slot);
-        if (t <= cl - slot) { time = fromMin(t); queue = (day.length ? Math.max(...day.map((b) => b.queue_number)) : 0) + 1; break; }
+        const op = toMin(d.start_time || s.open_time), cl = toMin(d.end_time || s.close_time);
+        if (date === now.date && now.min >= cl) continue;
+        const allDay = all.filter((b) => b.doctor_id === d.id && b.visit_date === date);
+        time = fromMin(op); queue = (allDay.length ? Math.max(...allDay.map((b) => b.queue_number)) : 0) + 1; break;
       }
       if (!time) throw friendly('NO_SLOT');
       const b = { id: uid(), ref: 'BX-' + Math.random().toString(16).slice(2, 8).toUpperCase(), doctor_id: d.id, doctor_name: d.name, specialty: d.specialty,
@@ -125,9 +125,9 @@
         is_returning: !!p.returning, notes: p.notes || null, visit_date: date, visit_time: time, queue_number: queue, fee: +d.fee, status: 'pending',
         paid_at: null, odoo_status: 'waiting', odoo_appointment_id: null, odoo_error: null, created_at: new Date().toISOString() };
       all.push(b); save(K.b, all);
-      return delay({ ref: b.ref, doctor: b.doctor_name, specialty: b.specialty, patient: b.patient_name, date: b.visit_date, time: b.visit_time, queue: b.queue_number, fee: b.fee, status: b.status });
+      return delay({ ref: b.ref, doctor: b.doctor_name, specialty: b.specialty, patient: b.patient_name, date: b.visit_date, time: b.visit_time, queue: b.queue_number, fee: b.fee, status: b.status, start: d.start_time || s.open_time, end: d.end_time || s.close_time });
     },
-    async lookup(ref) { const b = load(K.b, []).find((x) => x.ref === String(ref).trim().toUpperCase()); return delay(b ? { ref: b.ref, doctor: b.doctor_name, specialty: b.specialty, patient: b.patient_name.split(' ')[0], date: b.visit_date, time: b.visit_time, queue: b.queue_number, fee: b.fee, status: b.status } : null); },
+    async lookup(ref) { const b = load(K.b, []).find((x) => x.ref === String(ref).trim().toUpperCase()); const d = b && dDoctors().find((x) => x.id === b.doctor_id); return delay(b ? { ref: b.ref, doctor: b.doctor_name, specialty: b.specialty, patient: b.patient_name.split(' ')[0], date: b.visit_date, time: b.visit_time, queue: b.queue_number, fee: b.fee, status: b.status, start: d && d.start_time, end: d && d.end_time } : null); },
     async session() { return load(K.a, null); },
     async login(email, password) { if (!email || !password) throw new Error('Geli email iyo password.'); const s = { user: { email: loginEmail(email) } }; save(K.a, s); return s; },
     async me() { const s = load(K.a, null); return s ? { email: s.user.email, full_name: 'Demo Admin', role: 'admin' } : null; },

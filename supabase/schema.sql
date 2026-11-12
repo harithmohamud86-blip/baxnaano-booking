@@ -157,20 +157,12 @@ begin
   for i in 0..14 loop
     if extract(dow from v_date)::int = any(d.work_days) then
       perform pg_advisory_xact_lock(hashtext(p_doctor::text || v_date::text));
-      select count(*), max(visit_time), coalesce(max(queue_number),0) into v_count, v_last, v_maxq from public.bookings
-        where doctor_id = p_doctor and visit_date = v_date and status <> 'cancelled';
-      if v_count < d.daily_limit then
-        -- next slot = after the last booked patient, never before opening time
-        v_time := case when v_last is null then v_open
-                       else v_last + make_interval(mins => v_slot) end;
-        if v_date = v_now::date then
-          -- today: never give a time that has already passed (round up to the next slot)
-          v_time := greatest(v_time, v_open + make_interval(mins =>
-            greatest(0, ceil(extract(epoch from (v_now::time - v_open)) / 60 / v_slot))::int * v_slot));
-        end if;
-        if v_time <= v_close - make_interval(mins => v_slot) then
-          v_found := true; exit;
-        end if;
+      select count(*) filter (where status <> 'cancelled'), max(visit_time), coalesce(max(queue_number),0) into v_count, v_last, v_maxq
+        from public.bookings where doctor_id = p_doctor and visit_date = v_date;  -- queue numbers never reused
+      -- Somali style: no appointment times, only the queue number.
+      -- Today is allowed until the doctor's finishing time; after that → next working day.
+      if v_count < d.daily_limit and (v_date > v_now::date or v_now::time < v_close) then
+        v_time := v_open; v_found := true; exit;
       end if;
     end if;
     v_date := v_date + 1;
@@ -191,16 +183,19 @@ begin
 
   return json_build_object('ref', b.ref, 'doctor', b.doctor_name, 'specialty', b.specialty,
     'patient', b.patient_name, 'date', b.visit_date, 'time', to_char(b.visit_time,'HH24:MI'),
-    'queue', b.queue_number, 'fee', b.fee, 'status', b.status);
+    'queue', b.queue_number, 'fee', b.fee, 'status', b.status,
+    'start', to_char(v_open,'HH24:MI'), 'end', to_char(v_close,'HH24:MI'));
 end $$;
 
 -- Patients can check their booking with the reference number (no phone shown)
 create or replace function public.get_booking(p_ref text) returns json
 language sql stable security definer set search_path = public as $$
-  select json_build_object('ref', ref, 'doctor', doctor_name, 'specialty', specialty,
-    'patient', split_part(patient_name,' ',1), 'date', visit_date, 'time', to_char(visit_time,'HH24:MI'),
-    'queue', queue_number, 'fee', fee, 'status', status)
-  from public.bookings where ref = upper(trim(p_ref));
+  select json_build_object('ref', b.ref, 'doctor', b.doctor_name, 'specialty', b.specialty,
+    'patient', split_part(b.patient_name,' ',1), 'date', b.visit_date, 'time', to_char(b.visit_time,'HH24:MI'),
+    'queue', b.queue_number, 'fee', b.fee, 'status', b.status,
+    'start', to_char(coalesce(d.start_time, s.open_time),'HH24:MI'), 'end', to_char(coalesce(d.end_time, s.close_time),'HH24:MI'))
+  from public.bookings b left join public.doctors d on d.id = b.doctor_id cross join public.settings s
+  where b.ref = upper(trim(p_ref)) and s.id = 1;
 $$;
 
 revoke all on function public.create_booking(uuid,text,text,int,text,text,boolean,text) from public;
