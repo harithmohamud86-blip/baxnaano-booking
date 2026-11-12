@@ -2,7 +2,7 @@
 //  Supabase Edge Function: bx-staff
 //  Lets an ADMIN (admin.html → 👥 Shaqaalaha) add receptionists, reset their
 //  passwords, change roles and switch accounts off — without the Supabase dashboard.
-//  The caller must be logged in and have role 'admin' in public.staff.
+//  The caller must be logged in and have role 'admin' in public.staff (checked here; deploy with JWT verification OFF).
 //  Uses the service-role key that Supabase gives the function automatically
 //  (it never reaches the browser).
 // =====================================================================
@@ -34,6 +34,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return out({ ok: true });
   try {
     const auth = req.headers.get("Authorization") || "";
+    if (!auth.startsWith("Bearer ") || auth.length < 40) return out({ ok: false, error: "Fadlan soo gal." }, 401);
     const caller = createClient(env("SUPABASE_URL"), env("SUPABASE_ANON_KEY"), { global: { headers: { Authorization: auth } }, auth: { persistSession: false } });
     const { data: isAdmin } = await caller.rpc("is_admin");
     if (!isAdmin) return out({ ok: false, error: "Admin kaliya ayaa samayn kara." }, 403);
