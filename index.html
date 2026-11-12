@@ -209,7 +209,6 @@ footer a{color:#fff}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
-@media print{body *{visibility:hidden}.ticket,.ticket *{visibility:visible}.ticket{position:fixed;left:0;top:0;width:360px}}
 </style>
 </head>
 <body>
@@ -306,6 +305,7 @@ footer a{color:#fff}
 
 <script src="config.js"></script>
 <script src="api.js"></script>
+<script src="receipt.js"></script>
 <script>
 (function(){
 const $ = (id) => document.getElementById(id);
@@ -432,7 +432,7 @@ function renderSheet(err){
       const btn = ev.currentTarget; btn.disabled = true; btn.textContent = 'Waa la diraya…';
       try {
         const r = await BX.book({ doctor_id: d.id, name: B.name, phone: B.phone, age: B.age, gender: B.gender, district: B.district, returning: B.returning, notes: B.notes });
-        B.result = r; remember(r); step = 4; renderSheet();
+        B.result = r; remember(r, { phone: BX.normPhone(B.phone), age: B.age, gender: B.gender, district: B.district, returning: B.returning, created_at: new Date().toISOString() }); step = 4; renderSheet();
       } catch (e) { renderSheet(e.message); }
     };
   } else {
@@ -444,10 +444,13 @@ function renderSheet(err){
         <div style="font-size:12.5px;color:var(--muted);margin-top:8px">Marka wicitaanku furmo riix <b>Call</b>, kadibna geli PIN-kaaga.</div></div>
       <div class="acts" style="margin-bottom:10px">
         <a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/${waNum()}?text=${encodeURIComponent(`Ballan: ${r.ref}\nBukaan: ${r.patient}\nDhakhtar: ${r.doctor}\nTaariikh: ${fdate(r.date)} ${t12(r.time)}\nSafka: #${r.queue}\nLacag: ${fee(r.fee)} — waan bixiyay`)}">💬 U dir WhatsApp</a>
-        <button class="btn btn-line" onclick="window.print()">🖨️ Daabac</button></div>
+        <button class="btn btn-line" id="bPrint">🖨️ Daabac</button></div>
+      <button class="btn btn-main block" id="bPdf" style="margin-bottom:10px">📄 Soo deji rasiidka (PDF)</button>
       <p style="font-size:13px;color:var(--muted);text-align:center;margin:0 0 10px">Kaydi lambarka <b>${esc(r.ref)}</b> si aad ballankaaga u hubiso.</p>
       <button class="btn btn-line block" id="bDone">Dhammee</button>`;
     $('bDone').onclick = closeBook;
+    $('bPdf').onclick = (e) => getPDF(r, e.currentTarget);
+    $('bPrint').onclick = () => BXReceipt.print(receiptData(r), S);
   }
 }
 function ticketHTML(r){
@@ -460,14 +463,18 @@ function ticketHTML(r){
 }
 
 /* ---------- check booking ---------- */
+function receiptData(r){ const loc = (myRefs().find((x) => x.ref === r.ref) || {}).d || {}; return Object.assign({}, loc, r, { patient: (loc.patient && String(loc.patient).startsWith(r.patient)) ? loc.patient : r.patient }); }
+async function getPDF(r, btn){ const t = btn && btn.innerHTML; if (btn){ btn.disabled = true; btn.innerHTML = '⏳ PDF-ka waa la diyaarinayaa…'; } try { await BXReceipt.pdf(receiptData(r), S); } catch(e){ toast(e.message); } if (btn){ btn.disabled = false; btn.innerHTML = t; } }
 function myRefs(){ try { return JSON.parse(localStorage.getItem('bx_my_refs')) || []; } catch(e){ return []; } }
-function remember(r){ const l = myRefs().filter((x) => x.ref !== r.ref); l.unshift({ ref: r.ref, date: r.date }); try { localStorage.setItem('bx_my_refs', JSON.stringify(l.slice(0,5))); } catch(e){} renderMine(); }
+function remember(r, extra){ const old = myRefs().find((x) => x.ref === r.ref); const l = myRefs().filter((x) => x.ref !== r.ref); const d = Object.assign({}, old && old.d, r, extra || {}); if (old && old.d && old.d.patient && String(old.d.patient).length > String(r.patient||'').length) d.patient = old.d.patient; l.unshift({ ref: r.ref, date: r.date, d }); try { localStorage.setItem('bx_my_refs', JSON.stringify(l.slice(0,5))); } catch(e){} renderMine(); }
 function renderMine(){ const l = myRefs(); $('mine').innerHTML = l.length ? '<span style="font-size:12.5px;color:#a9c2cf;width:100%">Ballamadaada:</span>' + l.map((x) => `<button type="button" data-ref="${esc(x.ref)}">${esc(x.ref)}</button>`).join('') : ''; }
 async function check(ref){
   ref = String(ref||'').trim().toUpperCase(); if (!ref) return;
   if (!/^BX-/.test(ref)) ref = 'BX-' + ref.replace(/^BX/,'');
   $('chkRef').value = ref; $('chkRes').innerHTML = '<div style="color:#cfe4ec">Waa la raadinayaa…</div>';
-  try { const r = await BX.lookup(ref); $('chkRes').innerHTML = r ? `<div style="max-width:420px">${ticketHTML(r)}</div>` : '<div style="color:#fecaca">Ballankan lama helin. Hubi lambarka.</div>'; }
+  try { const r = await BX.lookup(ref); if (r) remember(r);
+    $('chkRes').innerHTML = r ? `<div style="max-width:420px">${ticketHTML(r)}<button class="btn btn-white block" id="chkPdf">📄 Soo deji rasiidka (PDF)</button>${r.status==='pending' ? '<p style="font-size:12.5px;color:#cfe4ec;margin:8px 0 0">Rasiidka “La bixiyay” wuxuu diyaar noqonayaa marka isbitaalku xaqiijiyo lacagta.</p>' : ''}</div>` : '<div style="color:#fecaca">Ballankan lama helin. Hubi lambarka.</div>';
+    if (r) $('chkPdf').onclick = (e) => getPDF(r, e.currentTarget); }
   catch(e){ $('chkRes').innerHTML = `<div style="color:#fecaca">${esc(e.message)}</div>`; }
 }
 

@@ -114,7 +114,7 @@ create or replace function public.create_booking(
   p_doctor uuid, p_name text, p_phone text, p_age int, p_gender text,
   p_district text, p_returning boolean, p_notes text default null
 ) returns json
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare
   s        public.settings;
   d        public.doctors;
