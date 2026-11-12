@@ -88,6 +88,25 @@ section.sec{padding:56px 0}
 .kick{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);margin-bottom:6px}
 .sec-h h2{font-size:clamp(24px,4.5vw,34px);font-weight:800}
 .sec-h p{color:var(--muted);margin:8px 0 0}
+.psteps{display:flex;align-items:center;gap:8px;margin:0 0 22px;flex-wrap:nowrap}
+.psteps div{flex:1;min-width:0;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:18px;padding:12px 6px;text-align:center}
+.psteps .pi{display:block;font-size:34px;line-height:1.1}.psteps b{display:block;font-size:13.5px;margin-top:6px;color:#fff}
+.psteps i{font-style:normal;color:#7fe0cf;font-weight:800;font-size:20px}
+.install{display:inline-flex;align-items:center;gap:6px;background:#e11d48;color:#fff;border-radius:999px;padding:9px 14px;font-weight:800;font-size:14px;border:0;cursor:pointer;white-space:nowrap}
+.pcards{display:grid;gap:14px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px 10px;text-align:center;box-shadow:var(--sh);position:relative}
+.pcard .big{font-size:52px;line-height:1.1;display:block}.pcard b{display:block;font-size:16px;margin-top:8px}
+.pcard .n{position:absolute;top:10px;left:10px;width:28px;height:28px;border-radius:9px;background:var(--navy);color:#fde047;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+.focus{display:flex;flex-wrap:wrap;gap:6px}
+.focus>span,.focus .more{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;padding:5px 9px;border-radius:10px;background:#eef6f4;color:var(--ink);border:0}
+.focus .ic{font-size:16px;padding:0;background:none}.focus .more{background:var(--navy);color:#fff;cursor:pointer}
+
+.doc .hrs{font-size:13px;font-weight:700;color:var(--ink2);margin:0}.doc .lim{font-size:12px;font-weight:800;color:#b45309;margin:0}
+.picvs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.picvs div{background:#fff;border-radius:18px;padding:14px 8px;text-align:center}
+.picvs .em{font-size:34px;letter-spacing:2px;display:block;line-height:1.2}.picvs b{display:block;margin-top:6px;font-size:15px}
+.picvs .bad b{color:#b42318}.picvs .good b{color:#0e7a4c}
+@media (max-width:600px){.install span{display:none}.pcards{gap:8px}.pcard{padding:14px 4px}.pcard .big{font-size:40px}.pcard b{font-size:13.5px}.focus>span,.focus .more{font-size:12px;padding:4px 7px}.focus .ic{font-size:14px}}
 .steps{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));counter-reset:s}
 .step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--sh)}
 .step .n{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));margin-bottom:14px}
@@ -269,7 +288,7 @@ footer a{color:#fff}
   <div class="wrap">
     <a class="brand" href="#"><img src="icon-192.png" alt=""><span><b id="hName">Baxnaano Hospital</b><small id="hTag">Treatment and beyond</small></span></a>
     <nav class="nav"><a href="#dhakhaatiirta">Dhakhaatiirta</a><a href="#hubi">Hubi ballan</a><a href="#sida">Sida loo ballansado</a><a href="#goobta">Goobta</a><a href="#xiriir">Xiriir</a></nav>
-    <a class="call" id="hCall" href="#xiriir">📞 <span>Wac</span></a>
+    <button class="install" type="button" id="hInstall">📲 <span>Soo dejiso</span></button><a class="call" id="hCall" href="#xiriir">📞 <span>Wac</span></a>
   </div>
 </header>
 <div class="annc" id="annc" hidden></div>
@@ -278,8 +297,12 @@ footer a{color:#fff}
   <div class="wrap">
     <div>
       <span class="badge"><span class="dot" id="openDot"></span><span id="openTxt">Ballan online ah</span></span>
-      <h1>Ballanso dhakhtarkaaga <em>adigoo meel kasta jooga</em></h1>
-      <p class="lead">Ha soo kallahin! Lambarka safka gurigaaga ka qabso — lambar hore, hore ayaad u gelaysaa.</p>
+      <h1>Ballanso dhakhtarkaaga <em>gurigaaga ka</em></h1>
+      <div class="psteps" aria-label="3 tallaabo">
+        <div><span class="pi">👨‍⚕️</span><b>Dooro</b></div><i>›</i>
+        <div><span class="pi">✍️</span><b>Magacaaga</b></div><i>›</i>
+        <div><span class="pi">🎫</span><b>Lambarkaaga</b></div>
+      </div>
       <div class="cta">
         <a class="btn btn-white" href="#dhakhaatiirta">🩺 Ballanso hadda</a>
         <a class="btn btn-ghost" href="#hubi">🔎 Hubi ballankaaga</a>
@@ -312,13 +335,12 @@ footer a{color:#fff}
       <div>
         <span class="kick" style="color:#a16207">📱 Ha soo kallahin</span>
         <h2>Safkaaga ka qabso gurigaaga</h2>
-        <p>Looma baahna inaad subax hore soo kallahdo oo saf dheer gasho. Taleefankaaga ka qabso lambarka safka, kadibna kaalay markuu lambarkaagu soo dhowaado.</p>
         <div class="areas" aria-label="Degmooyinka">
           <span>Balcad</span><span>Darmooleey</span><span>Kaaraan</span><span>Suuqa Xoolaha</span><span>Ceelasha Biyaha</span><span>Dharkenley</span><span>Kaxda</span><span>Hurwaa</span><span>Yaaqshiid</span><span>Wadajir</span>
         </div>
-        <div class="vs">
-          <div class="bad"><b>❌ Hore</b>Subax hore kallah, gaadiid bixi, saacado saf ku sug.</div>
-          <div class="good"><b>✅ Hadda</b>Gurigaaga ka ballanso, lambarkaaga hel, waqtigaaga kaalay.</div>
+        <div class="picvs">
+          <div class="bad"><span class="em">🌅🚶🚶</span><b>❌ Saf dheer</b></div>
+          <div class="good"><span class="em">🏠📱🎫</span><b>✅ Gurigaaga</b></div>
         </div>
         <div class="acts" style="margin-top:14px">
           <a class="btn btn-main" href="#dhakhaatiirta">🎫 Qabso lambarkaaga</a>
@@ -352,11 +374,11 @@ footer a{color:#fff}
 
 <section class="sec" id="sida">
   <div class="wrap">
-    <div class="sec-h rv"><span class="kick">3 tallaabo</span><h2>Sida loo ballansado</h2><p>Ballankaagu wuxuu qaadanayaa hal daqiiqo keliya.</p></div>
-    <div class="steps">
-      <div class="step rv"><div class="n">1</div><h3>Dooro dhakhtar</h3><p>Raadi takhasuska aad u baahan tahay oo dooro dhakhtarka.</p></div>
-      <div class="step rv"><div class="n">2</div><h3>Xogta bukaanka</h3><p>Geli magaca, taleefanka, da'da iyo jinsiga bukaanka.</p></div>
-      <div class="step rv"><div class="n">3</div><h3>Xaqiiji &amp; bixi</h3><p>Hel lambarka safka, kadibna ku bixi taleefankaaga (EVC · Zaad · Sahal).</p></div>
+    <div class="sec-h rv"><span class="kick">3 tallaabo</span><h2>Sida loo ballansado</h2></div>
+    <div class="pcards">
+      <div class="pcard rv"><span class="n">1</span><span class="big">👨‍⚕️</span><b>Riix dhakhtarka</b></div>
+      <div class="pcard rv"><span class="n">2</span><span class="big">✍️</span><b>Qor magacaaga</b></div>
+      <div class="pcard rv"><span class="n">3</span><span class="big">🎫</span><b>Hel lambarkaaga</b></div>
     </div>
   </div>
 </section>
@@ -457,6 +479,11 @@ function renderChips(){
   $('chips').hidden = specs.length < 2;
   $('chips').innerHTML = [`<button class="chip ${spec==='all'?'on':''}" data-s="all">Dhammaan</button>`].concat(specs.map((s) => `<button class="chip ${spec===s?'on':''}" data-s="${esc(s)}">${esc(short(s))}</button>`)).join('');
 }
+const ICONS = [[/madax|migraine|neerf|maskax/i,'🧠'],[/dhabar|lafo|lafa/i,'🦴'],[/wareer|vertigo/i,'💫'],[/dhag|tinnitus/i,'👂'],[/indh|il\b|squint/i,'👁️'],[/faalig|stroke/i,'🧠'],
+  [/ilmo|ilmaha|carruur|dhallaan|newborn|cerebral/i,'👶'],[/qandho|infek|fever/i,'🌡️'],[/shuban|matag|calool|gaastri|stomach/i,'🤢'],[/nafaqo|koritaan/i,'🍼'],
+  [/neef|qufac|sambab|oof|asthma|copd|qaax/i,'🫁'],[/sonkor|diabet/i,'🩸'],[/dhiig/i,'🩸'],[/wadne|kely|heart/i,'❤️'],[/autism|ootiis/i,'🧩'],[/adhd|firfircoon/i,'⚡'],[/hadal|shig|aphasia|speech/i,'🗣️'],[/cagaarshow|beer|liver/i,'🟡']];
+function focusChip(c){ const short = String(c).replace(/\s*\(.*?\)\s*/g,' ').replace(/\s+/g,' ').trim(); const ic = (ICONS.find(([r]) => r.test(c)) || [0,'✚'])[1];
+  return `<span><span class="ic" aria-hidden="true">${ic}</span>${esc(short)}</span>`; }
 function parseBio(b){
   const out = { role:'', exp:'', conds:[], other:[] };
   String(b||'').split(/\n+/).map((x) => x.trim()).filter(Boolean).forEach((l) => {
@@ -476,9 +503,9 @@ function renderDocs(){
       <div class="ph">${d.photo_url ? `<img src="${esc(d.photo_url)}" alt="${esc(d.name)}" loading="lazy" onerror="this.remove()">` : ''}<span class="ini" ${d.photo_url?'style="z-index:-1"':''}>${esc(ini(d.name))}</span>
         ${expN ? `<span class="exp">⭐ ${esc(expN)} sano</span>` : ''}<span class="tag ${tg.cls}">${tg.html}</span></div>
       <div class="bd"><h3>${esc(d.name)}</h3><span class="sp">${esc(d.specialty)}</span>
-        ${bi.role ? `<p class="role">${esc(bi.role)}</p>` : ''}
-        ${bi.conds.length ? `<div class="conds">${bi.conds.slice(0,4).map((c) => `<span>${esc(c)}</span>`).join('')}${bi.conds.length > 4 ? `<button type="button" class="more" data-more="${d.id}">+${bi.conds.length-4}</button>` : ''}</div>` : ''}
-        ${bi.other.length ? `<p class="bio">${esc(bi.other.join(' · '))}</p>` : ''}<p class="bio">📅 ${esc(days)}${hoursTxt(d) ? `<br>🕐 ${esc(hoursTxt(d))}` : ''}</p>
+        ${bi.conds.length ? `<div class="focus">${bi.conds.slice(0,3).map(focusChip).join('')}${bi.conds.length > 3 ? `<button type="button" class="more" data-more="${d.id}" aria-label="Arag dhammaan">+${bi.conds.length-3}</button>` : ''}</div>` : ''}
+        ${hoursTxt(d) ? `<p class="hrs">🕐 ${esc(hoursTxt(d))}${days !== 'Maalin kasta' ? ' · ' + esc(days) : ''}</p>` : ''}
+        ${+d.daily_limit && +d.daily_limit <= 10 ? `<p class="lim">👥 ${+d.daily_limit} bukaan kaliya maalintii</p>` : ''}
         <div class="ft"><div class="price">${fee(d.fee)} <small>/ballan</small></div><button class="btn btn-main" data-id="${d.id}">Ballanso</button></div></div>
     </article>`; }).join('') || `<div class="empty">🩺 ${DOCS.length ? 'Dhakhtar ku habboon lama helin.' : 'Hadda dhakhtar diyaar ah ma jiro.'}</div>`;
 }
@@ -549,11 +576,9 @@ function renderSheet(err){
       <div class="paybox"><b>💳 Bixi ${fee(r.fee)} hadda</b><div class="code">${esc(code)}</div>
         <a class="btn btn-main block" href="tel:${encodeURIComponent(code)}">📲 Bixi hadda</a>
         <div style="font-size:12.5px;color:var(--muted);margin-top:8px">Marka wicitaanku furmo riix <b>Call</b>, kadibna geli PIN-kaaga.</div></div>` : '') + `
-      <div class="acts" style="margin-bottom:10px">
-        <a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/${waNum()}?text=${encodeURIComponent(`Ballan: ${r.ref}\nBukaan: ${r.patient}\nDhakhtar: ${r.doctor}\nTaariikh: ${fdate(r.date)}\nSafka: #${r.queue}\nLacag: ${fee(r.fee)} — waan bixiyay`)}">💬 U dir WhatsApp</a>
-        <button class="btn btn-line" id="bPrint">🖨️ Daabac</button></div>
-      <button class="btn btn-main block" id="bPdf" style="margin-bottom:10px">📄 Soo deji rasiidka (PDF)</button>
-      <p style="font-size:13px;color:var(--muted);text-align:center;margin:0 0 10px">Kaydi lambarka <b>${esc(r.ref)}</b> si aad ballankaaga u hubiso.</p>
+      <button class="btn btn-main block" id="bPdf" style="margin-bottom:10px;font-size:17px;padding:16px">📄 Soo deji tigidhka (PDF)</button>
+      <a class="btn btn-wa block" style="margin-bottom:10px;font-size:17px;padding:16px" target="_blank" rel="noopener" href="https://wa.me/${selfWa()}?text=${encodeURIComponent(`🎫 Baxnaano Hospital\nSafka: #${r.queue}\nDhakhtar: ${r.doctor}\nTaariikh: ${fdate(r.date)}\nBallan: ${r.ref}\n${location.origin + location.pathname}?ref=${r.ref}`)}">💬 Ku keydi WhatsApp-kaaga</a>
+      <div class="acts" style="margin-bottom:10px"><button class="btn btn-line" id="bPrint">🖨️ Daabac</button><a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/${waNum()}?text=${encodeURIComponent(`Ballan: ${r.ref} · Safka #${r.queue} · ${r.doctor}`)}">📞 Isbitaalka</a></div>
       <button class="btn btn-line block" id="bDone">Dhammee</button>`;
     $('bDone').onclick = closeBook;
     wireOlPay(r, () => renderSheet());
@@ -562,6 +587,7 @@ function renderSheet(err){
   }
 }
 /* ---------- online payment (WaafiPay) ---------- */
+function selfWa(){ let p = BX.normPhone((typeof B !== 'undefined' && B && B.phone) || ''); p = p.replace(/^0+/, ''); return p ? '252' + p : ''; }
 function olPayHTML(r){
   if (!S.online_pay || r.status !== 'pending') return '';
   const ph = (typeof B !== 'undefined' && B && B.result === r && B.phone) || ((myRefs().find((x) => x.ref === r.ref) || {}).d || {}).phone || '';
@@ -614,7 +640,7 @@ $('shareBtn').onclick = async () => {
   if (navigator.share){ try { await navigator.share({ title: 'Baxnaano — Ballan online', text, url }); return; } catch(e){ if (e && e.name === 'AbortError') return; } }
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
 };
-$('installBtn').onclick = async () => {
+$('installBtn').onclick = $('hInstall').onclick = async () => {
   if (installEvt){ installEvt.prompt(); try { await installEvt.userChoice; } catch(e){} installEvt = null; return; }
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
   toast(ios ? 'iPhone: riix ⬆️ Share, kadib “Add to Home Screen”.' : 'Riix ⋮ (menu-ga browser-ka), kadib “Add to Home screen” / “Install app”.');
@@ -622,7 +648,7 @@ $('installBtn').onclick = async () => {
 
 /* ---------- events ---------- */
 document.addEventListener('click', (e) => {
-  const mo = e.target.closest('[data-more]'); if (mo){ const d = DOCS.find((x) => x.id === mo.dataset.more); const box = mo.parentElement; box.innerHTML = parseBio(d.bio).conds.map((c) => `<span>${esc(c)}</span>`).join(''); return; }
+  const mo = e.target.closest('[data-more]'); if (mo){ const d = DOCS.find((x) => x.id === mo.dataset.more); const box = mo.parentElement; box.innerHTML = parseBio(d.bio).conds.map(focusChip).join(''); return; }
   const b = e.target.closest('[data-id]'); if (b){ openBook(b.dataset.id); return; }
   const c = e.target.closest('.chip'); if (c){ spec = c.dataset.s; renderChips(); renderDocs(); return; }
   const m = e.target.closest('#mine button'); if (m){ check(m.dataset.ref); }
