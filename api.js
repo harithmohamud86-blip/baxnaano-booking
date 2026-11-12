@@ -83,10 +83,10 @@
   const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
   const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2));
   const SEED = [
-    { name: 'Dr. Yahye Shoole', specialty: 'Carruurta (Pediatrician)', fee: 10, photo_url: 'photos/dr-yahye.jpg', odoo_doctor_id: 23, sort_order: 1 },
-    { name: 'Dr. Harith Abdikadir Mohamud', specialty: 'Neerfaha (Neurologist)', fee: 10, photo_url: 'photos/dr-harith.jpg', odoo_doctor_id: 22, sort_order: 2, bio: 'Senior Consultant Neurologist · Dhakhtarka neerfaha iyo madaxa\n12+ sano khibrad\n- Madax xanuun (migraine, tension, cluster)\n- Dhabar xanuunka\n- Wareer (vertigo)\n- Dhaga guuxa (tinnitus)\n- Indha kala qallooca neerfaha\n- Faaliga (stroke)\n- Ilmaha kafka ku daaha (cerebral palsy, birth asphyxia)' },
-    { name: 'Dr. Hersi', specialty: 'Cudurrada Guud & Uurkujirta', fee: 10, photo_url: 'photos/dr-hersi.jpg', odoo_doctor_id: 49, sort_order: 3 },
-    { name: 'Dr. Sadio Omar', specialty: 'Daaweynta Hadalka (Speech Therapy)', fee: 21, photo_url: 'photos/dr-sadio.jpg', odoo_doctor_id: 46, sort_order: 4 }
+    { name: 'Dr. Yahye Shoole', specialty: 'Carruurta (Pediatrician)', fee: 10, photo_url: 'photos/dr-yahye.jpg', odoo_doctor_id: 23, sort_order: 1, start_time: '07:00', end_time: '19:30' },
+    { name: 'Dr. Harith Abdikadir Mohamud', specialty: 'Neerfaha iyo Madaxa (Neurologist)', fee: 10, photo_url: 'photos/dr-harith.jpg', odoo_doctor_id: 22, sort_order: 2, start_time: '07:30', end_time: '18:00', bio: 'Senior Consultant Neurologist · Dhakhtarka neerfaha iyo madaxa\n12+ sano khibrad\n- Madax xanuun (migraine, tension, cluster)\n- Dhabar xanuunka\n- Wareer (vertigo)\n- Dhaga guuxa (tinnitus)\n- Indha kala qallooca neerfaha\n- Faaliga (stroke)\n- Ilmaha kafka ku daaha (cerebral palsy, birth asphyxia)' },
+    { name: 'Dr. Abdulkadir Hersi', specialty: 'Cudurrada Guud & Sambabada (Internal Medicine)', fee: 10, photo_url: 'photos/dr-hersi.jpg', odoo_doctor_id: 49, sort_order: 3, start_time: '16:30', end_time: '19:30' },
+    { name: 'Dr. Sadio Omar', specialty: 'Daaweynta Hadalka (Speech Therapy)', fee: 21, photo_url: 'photos/dr-sadio.jpg', odoo_doctor_id: 46, sort_order: 4, start_time: '07:30', end_time: '14:30' }
   ].map((d) => Object.assign({ id: uid(), bio: '', work_days: [0, 1, 2, 3, 4, 5, 6], daily_limit: 40, active: true }, d));
   const dDoctors = () => { let l = load(K.d, null); if (!l) { l = SEED; save(K.d, l); } return l; };
   const delay = (v) => new Promise((r) => setTimeout(() => r(v), 250));
@@ -104,9 +104,10 @@
         const dow = new Date(date + 'T00:00:00Z').getUTCDay(); if (!d.work_days.includes(dow)) continue;
         const day = all.filter((b) => b.doctor_id === d.id && b.visit_date === date && b.status !== 'cancelled');
         if (day.length >= d.daily_limit) continue;
-        let t = day.length ? Math.max(...day.map((b) => toMin(b.visit_time))) + slot : toMin(s.open_time);
-        if (date === now.date) t = Math.max(t, toMin(s.open_time) + Math.max(0, Math.ceil((now.min - toMin(s.open_time)) / slot)) * slot);
-        if (t <= toMin(s.close_time) - slot) { time = fromMin(t); queue = (day.length ? Math.max(...day.map((b) => b.queue_number)) : 0) + 1; break; }
+        const op = toMin(d.start_time || s.open_time), cl = toMin(d.end_time || s.close_time);
+        let t = day.length ? Math.max(...day.map((b) => toMin(b.visit_time))) + slot : op;
+        if (date === now.date) t = Math.max(t, op + Math.max(0, Math.ceil((now.min - op) / slot)) * slot);
+        if (t <= cl - slot) { time = fromMin(t); queue = (day.length ? Math.max(...day.map((b) => b.queue_number)) : 0) + 1; break; }
       }
       if (!time) throw friendly('NO_SLOT');
       const b = { id: uid(), ref: 'BX-' + Math.random().toString(16).slice(2, 8).toUpperCase(), doctor_id: d.id, doctor_name: d.name, specialty: d.specialty,

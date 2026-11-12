@@ -162,6 +162,8 @@ tr:last-child td{border:0}
     <div class="f"><label>Bukaanno maalintii (ugu badnaan)</label><input id="dLimit" type="number" min="1" required></div>
     <div class="f"><label>Odoo Doctor ID</label><input id="dOdoo" type="number" min="1" placeholder="tusaale 22"></div>
     <div class="f"><label>Kala horreynta</label><input id="dSort" type="number"></div>
+    <div class="f"><label>Saacadda bilowga</label><input id="dStart" type="time"></div>
+    <div class="f"><label>Saacadda dhammaadka</label><input id="dEnd" type="time"></div>
   </div>
   <datalist id="specList"><option>Carruurta (Pediatrician)</option><option>Neerfaha (Neurologist)</option><option>Cudurrada Guud (General Medicine)</option><option>Haweenka &amp; Umulaha (Gynecology)</option><option>Lafaha (Orthopedics)</option><option>Wadnaha (Cardiology)</option><option>Indhaha (Ophthalmology)</option><option>Ilkaha (Dentist)</option><option>Maqaarka (Dermatology)</option><option>Dhegaha, Sanka &amp; Cunaha (ENT)</option><option>Daaweynta Hadalka (Speech Therapy)</option><option>Jimicsiga Daaweynta (Physiotherapy)</option></datalist>
   <div class="f"><label>Maalmaha uu shaqeeyo</label><div class="days" id="dDays"></div></div>
@@ -266,7 +268,7 @@ $('rows').onclick = async (e) => {
 
 /* ---------- doctors ---------- */
 function renderDocs(){
-  $('docList').innerHTML = DOCS.map((d) => `<div class="dc ${d.active?'':'off'}"><span class="av">${av(d)}</span><div><b>${esc(d.name)}</b><div class="muted">${esc(d.specialty)}</div><div class="muted">$${Number(d.fee)} · ${d.daily_limit}/maalin · Odoo #${d.odoo_doctor_id ?? '—'}${d.active?'':' · qarsoon'}</div></div><button class="btn btn-line sm r" data-edit="${d.id}">✏️</button></div>`).join('') || '<div class="empty">Dhakhtar ma jiro.</div>';
+  $('docList').innerHTML = DOCS.map((d) => `<div class="dc ${d.active?'':'off'}"><span class="av">${av(d)}</span><div><b>${esc(d.name)}</b><div class="muted">${esc(d.specialty)}</div><div class="muted">$${Number(d.fee)} · ${d.daily_limit}/maalin${d.start_time ? ' · ' + d.start_time.slice(0,5) + '–' + (d.end_time||'').slice(0,5) : ''} · Odoo #${d.odoo_doctor_id ?? '—'}${d.active?'':' · qarsoon'}</div></div><button class="btn btn-line sm r" data-edit="${d.id}">✏️</button></div>`).join('') || '<div class="empty">Dhakhtar ma jiro.</div>';
 }
 $('docList').onclick = (e) => { const b = e.target.closest('[data-edit]'); if (b) openDoc(DOCS.find((d) => d.id === b.dataset.edit)); };
 $('addDoc').onclick = () => openDoc(null);
@@ -275,6 +277,7 @@ function openDoc(d){
   $('docTitle').textContent = d ? 'Wax ka beddel dhakhtarka' : 'Dhakhtar cusub';
   $('dName').value = editing.name; $('dSpec').value = editing.specialty; $('dFee').value = editing.fee; $('dLimit').value = editing.daily_limit;
   $('dOdoo').value = editing.odoo_doctor_id ?? ''; $('dSort').value = editing.sort_order ?? 0; $('dBio').value = editing.bio || ''; $('dActive').checked = editing.active !== false;
+  $('dStart').value = (editing.start_time||'').slice(0,5); $('dEnd').value = (editing.end_time||'').slice(0,5);
   $('dDays').innerHTML = WEEK.map((w,i) => `<label><input type="checkbox" value="${i}" ${(editing.work_days||[]).includes(i)?'checked':''}>${w}</label>`).join('');
   $('dPrev').innerHTML = av(editing); $('dUp').textContent = ''; $('docOv').hidden = false;
 }
@@ -292,7 +295,9 @@ $('docForm').onsubmit = async (e) => {
   if (!days.length){ toast('Dooro ugu yaraan hal maalin'); return; }
   const row = { id: editing.id, name: $('dName').value.trim(), specialty: $('dSpec').value.trim(), fee: +$('dFee').value, daily_limit: +$('dLimit').value,
     odoo_doctor_id: $('dOdoo').value ? +$('dOdoo').value : null, sort_order: +$('dSort').value || 0, bio: $('dBio').value.trim() || null,
-    photo_url: editing.photo_url || null, work_days: days, active: $('dActive').checked };
+    photo_url: editing.photo_url || null, work_days: days, active: $('dActive').checked,
+    start_time: $('dStart').value || null, end_time: $('dEnd').value || null };
+  if (row.start_time && row.end_time && row.end_time <= row.start_time){ toast('Saacadda dhammaadka waa inay ka dambeysaa bilowga'); return; }
   try { await BX.saveDoctor(row); $('docOv').hidden = true; toast('💾 Waa la kaydiyay'); DOCS = await BX.allDoctors(); renderDocs(); }
   catch(err){ toast(err.message); }
 };

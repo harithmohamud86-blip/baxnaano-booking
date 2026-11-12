@@ -110,7 +110,7 @@ section.sec{padding:56px 0}
 .doc .ph img{width:100%;height:100%;object-fit:cover;object-position:top}
 .doc .ph .ini{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:800;color:var(--brand)}
 .doc .tag{position:absolute;left:12px;top:12px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.92);font-size:12px;font-weight:700;color:var(--ok)}
-.doc .tag.away{color:var(--warn)}
+.doc .tag.away{color:var(--warn)} .doc .tag.soon{color:#b7791f}
 .doc .bd{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
 .doc h3{font-size:17px}
 .doc .sp{align-self:flex-start;padding:4px 10px;border-radius:8px;background:var(--soft);color:#08624f;font-size:12.5px;font-weight:600}
@@ -359,6 +359,16 @@ const waNum = () => String(S.whatsapp||'').replace(/\D/g,'');
 const fmtPhone = (p) => { const d = String(p||'').replace(/\D/g,''); return /^252\d{9}$/.test(d) ? `+252 ${d.slice(3,5)} ${d.slice(5,8)} ${d.slice(8)}` : (/^0\d{9}$/.test(d) ? `${d.slice(0,4)} ${d.slice(4,7)} ${d.slice(7)}` : p); };
 const phones = () => (S.phones && S.phones.length ? S.phones : (waNum() ? ['+'+waNum()] : []));
 const worksToday = (d) => (d.work_days||[0,1,2,3,4,5,6]).includes(BX.mogNow().dow);
+const tMin = (t) => { const m = String(t||'').match(/(\d+):(\d+)/); return m ? +m[1]*60 + +m[2] : null; };
+const hoursTxt = (d) => d.start_time && d.end_time ? `${t12(d.start_time)} – ${t12(d.end_time)}` : '';
+function nowTag(d){
+  if (!worksToday(d)) return { cls:'away', html:'○ <span class="tl">Maanta </span>ma joogo' };
+  const n = BX.mogNow().min, a = tMin(d.start_time), b = tMin(d.end_time);
+  if (a == null || b == null) return { cls:'', html:'● Maanta<span class="tl"> wuu joogaa</span>' };
+  if (n < a) return { cls:'soon', html:`◷ <span class="tl">Wuxuu imanayaa </span>${t12(d.start_time)}` };
+  if (n < b) return { cls:'', html:'● Hadda<span class="tl"> wuu joogaa</span>' };
+  return { cls:'away', html:'○ <span class="tl">Maanta </span>wuu baxay' };
+}
 function isOpenNow(){ if(!S.booking_open) return false; return true; }
 
 /* ---------- render ---------- */
@@ -408,15 +418,15 @@ function renderDocs(){
   const q = $('q').value.trim().toLowerCase();
   const list = DOCS.filter((d) => (spec === 'all' || d.specialty === spec) && (!q || (d.name+' '+d.specialty).toLowerCase().includes(q)));
   $('docs').innerHTML = list.map((d) => {
-    const today = worksToday(d); const bi = parseBio(d.bio); const expN = (bi.exp.match(/\d+\+?/)||[''])[0];
+    const tg = nowTag(d); const bi = parseBio(d.bio); const expN = (bi.exp.match(/\d+\+?/)||[''])[0];
     const days = (d.work_days||[]).length === 7 ? 'Maalin kasta' : (d.work_days||[]).map((x) => WEEK[x]).join(', ');
     return `<article class="doc rv in">
       <div class="ph">${d.photo_url ? `<img src="${esc(d.photo_url)}" alt="${esc(d.name)}" loading="lazy" onerror="this.remove()">` : ''}<span class="ini" ${d.photo_url?'style="z-index:-1"':''}>${esc(ini(d.name))}</span>
-        ${expN ? `<span class="exp">⭐ ${esc(expN)} sano</span>` : ''}<span class="tag ${today?'':'away'}">${today ? '● Maanta<span class="tl"> wuu joogaa</span>' : '○ Maanta<span class="tl"> ma joogo</span>'}</span></div>
+        ${expN ? `<span class="exp">⭐ ${esc(expN)} sano</span>` : ''}<span class="tag ${tg.cls}">${tg.html}</span></div>
       <div class="bd"><h3>${esc(d.name)}</h3><span class="sp">${esc(d.specialty)}</span>
         ${bi.role ? `<p class="role">${esc(bi.role)}</p>` : ''}
         ${bi.conds.length ? `<div class="conds">${bi.conds.slice(0,4).map((c) => `<span>${esc(c)}</span>`).join('')}${bi.conds.length > 4 ? `<button type="button" class="more" data-more="${d.id}">+${bi.conds.length-4}</button>` : ''}</div>` : ''}
-        ${bi.other.length ? `<p class="bio">${esc(bi.other.join(' · '))}</p>` : ''}<p class="bio">📅 ${esc(days)}</p>
+        ${bi.other.length ? `<p class="bio">${esc(bi.other.join(' · '))}</p>` : ''}<p class="bio">📅 ${esc(days)}${hoursTxt(d) ? `<br>🕐 ${esc(hoursTxt(d))}` : ''}</p>
         <div class="ft"><div class="price">${fee(d.fee)} <small>/ballan</small></div><button class="btn btn-main" data-id="${d.id}">Ballanso</button></div></div>
     </article>`; }).join('') || `<div class="empty">🩺 ${DOCS.length ? 'Dhakhtar ku habboon lama helin.' : 'Hadda dhakhtar diyaar ah ma jiro.'}</div>`;
 }

@@ -36,6 +36,8 @@ create table if not exists public.doctors (
   bio             text,
   odoo_doctor_id  int,                                  -- id of this doctor in Odoo (nuro.doctor)
   work_days       int[]   not null default '{0,1,2,3,4,5,6}', -- 0=Axad … 6=Sabti
+  start_time      time,                 -- doctor's own hours (empty = hospital hours)
+  end_time        time,
   daily_limit     int     not null default 40 check (daily_limit > 0),
   active          boolean not null default true,
   sort_order      int     not null default 0,
@@ -127,6 +129,8 @@ declare
   v_found  boolean := false;
   v_phone  text := regexp_replace(coalesce(p_phone,''), '\D', '', 'g');
   v_ref    text;
+  v_open   time;
+  v_close  time;
   b        public.bookings;
 begin
   select * into s from public.settings where id = 1;
@@ -134,6 +138,8 @@ begin
 
   select * into d from public.doctors where id = p_doctor and active;
   if not found then raise exception 'DOCTOR_NOT_FOUND'; end if;
+  v_open  := coalesce(d.start_time, s.open_time);
+  v_close := coalesce(d.end_time, s.close_time);
 
   if length(trim(coalesce(p_name,''))) < 3 or length(p_name) > 120 then raise exception 'BAD_NAME'; end if;
   if v_phone like '252%' then v_phone := substr(v_phone, 4); end if;
@@ -152,14 +158,14 @@ begin
         where doctor_id = p_doctor and visit_date = v_date and status <> 'cancelled';
       if v_count < d.daily_limit then
         -- next slot = after the last booked patient, never before opening time
-        v_time := case when v_last is null then s.open_time
+        v_time := case when v_last is null then v_open
                        else v_last + make_interval(mins => s.slot_minutes) end;
         if v_date = v_now::date then
           -- today: never give a time that has already passed (round up to the next slot)
-          v_time := greatest(v_time, s.open_time + make_interval(mins =>
-            greatest(0, ceil(extract(epoch from (v_now::time - s.open_time)) / 60 / s.slot_minutes))::int * s.slot_minutes));
+          v_time := greatest(v_time, v_open + make_interval(mins =>
+            greatest(0, ceil(extract(epoch from (v_now::time - v_open)) / 60 / s.slot_minutes))::int * s.slot_minutes));
         end if;
-        if v_time <= s.close_time - make_interval(mins => s.slot_minutes) then
+        if v_time <= v_close - make_interval(mins => s.slot_minutes) then
           v_found := true; exit;
         end if;
       end if;
@@ -254,3 +260,7 @@ where not exists (select 1 from public.doctors);
 -- Admin login (create the same user in Authentication → Users)
 insert into public.staff (email, full_name) values ('harithmohamud86@gmail.com', 'Admin')
   on conflict do nothing;
+
+-- upgrade for existing databases
+alter table public.doctors add column if not exists start_time time;
+alter table public.doctors add column if not exists end_time time;
