@@ -233,6 +233,13 @@ footer a{color:#fff}
 .st{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
 .st.pending{background:#fff4d6;color:#8a5a00}.st.paid{background:#dcf5e8;color:#0e7a4c}.st.arrived{background:#dbeafe;color:#1d4ed8}.st.cancelled{background:#fde2e4;color:#9b2c35}
 .paybox{border:2px solid var(--brand);border-radius:18px;padding:16px;margin-bottom:12px;text-align:center}
+.olpay{background:linear-gradient(135deg,#0f766e,#115e59);color:#fff;border-radius:18px;padding:16px;margin-bottom:12px}
+.olpay b{display:block;font-size:16px;margin-bottom:4px}.olpay p{margin:0 0 10px;font-size:12.5px;opacity:.9}
+.olpay .row{display:flex;gap:8px}.olpay input{flex:1;min-width:0;border:0;border-radius:12px;padding:12px;font-size:16px;font-weight:700}
+.olpay button{border:0;border-radius:12px;padding:12px 16px;font-weight:800;background:#fde047;color:#3f2d00;white-space:nowrap}
+.olpay .wait{display:flex;gap:10px;align-items:center;font-weight:700}.olpay .spin{width:22px;height:22px;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}} .olpay .err{background:rgba(254,202,202,.18);border-radius:10px;padding:8px 10px;margin-top:8px;font-size:13px}
+.or{text-align:center;font-size:12px;color:var(--muted);margin:2px 0 10px}
 .paybox .code{font-size:22px;font-weight:800;letter-spacing:.04em;margin:6px 0 12px;word-break:break-all}
 
 .wa-fab{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:50;width:58px;height:58px;border-radius:50%;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(37,211,102,.45);text-decoration:none}
@@ -304,7 +311,7 @@ footer a{color:#fff}
     <div class="steps">
       <div class="step rv"><div class="n">1</div><h3>Dooro dhakhtar</h3><p>Raadi takhasuska aad u baahan tahay oo dooro dhakhtarka.</p></div>
       <div class="step rv"><div class="n">2</div><h3>Xogta bukaanka</h3><p>Geli magaca, taleefanka, da'da iyo jinsiga bukaanka.</p></div>
-      <div class="step rv"><div class="n">3</div><h3>Xaqiiji &amp; bixi</h3><p>Hel lambarka safka, kadibna ku bixi taleefankaaga (USSD).</p></div>
+      <div class="step rv"><div class="n">3</div><h3>Xaqiiji &amp; bixi</h3><p>Hel lambarka safka, kadibna ku bixi taleefankaaga (EVC · Zaad · Sahal).</p></div>
     </div>
   </div>
 </section>
@@ -493,10 +500,10 @@ function renderSheet(err){
   } else {
     const r = B.result; $('shTitle').textContent = 'Ballanka waa diyaar ✅';
     const code = `${S.ussd_prefix || '*712*'}${String(S.ussd_number||'').replace(/\D/g,'')}*${Number(r.fee)}#`;
-    $('shBody').innerHTML = ticketHTML(r) + `
+    $('shBody').innerHTML = ticketHTML(r) + (r.status === 'pending' ? olPayHTML(r) : '') + (r.status === 'pending' ? `
       <div class="paybox"><b>💳 Bixi ${fee(r.fee)} hadda</b><div class="code">${esc(code)}</div>
         <a class="btn btn-main block" href="tel:${encodeURIComponent(code)}">📲 Bixi hadda</a>
-        <div style="font-size:12.5px;color:var(--muted);margin-top:8px">Marka wicitaanku furmo riix <b>Call</b>, kadibna geli PIN-kaaga.</div></div>
+        <div style="font-size:12.5px;color:var(--muted);margin-top:8px">Marka wicitaanku furmo riix <b>Call</b>, kadibna geli PIN-kaaga.</div></div>` : '') + `
       <div class="acts" style="margin-bottom:10px">
         <a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/${waNum()}?text=${encodeURIComponent(`Ballan: ${r.ref}\nBukaan: ${r.patient}\nDhakhtar: ${r.doctor}\nTaariikh: ${fdate(r.date)} ${t12(r.time)}\nSafka: #${r.queue}\nLacag: ${fee(r.fee)} — waan bixiyay`)}">💬 U dir WhatsApp</a>
         <button class="btn btn-line" id="bPrint">🖨️ Daabac</button></div>
@@ -504,9 +511,29 @@ function renderSheet(err){
       <p style="font-size:13px;color:var(--muted);text-align:center;margin:0 0 10px">Kaydi lambarka <b>${esc(r.ref)}</b> si aad ballankaaga u hubiso.</p>
       <button class="btn btn-line block" id="bDone">Dhammee</button>`;
     $('bDone').onclick = closeBook;
+    wireOlPay(r, () => renderSheet());
     $('bPdf').onclick = (e) => getPDF(r, e.currentTarget);
     $('bPrint').onclick = () => BXReceipt.print(receiptData(r), S);
   }
+}
+/* ---------- online payment (WaafiPay) ---------- */
+function olPayHTML(r){
+  if (!S.online_pay || r.status !== 'pending') return '';
+  const ph = (typeof B !== 'undefined' && B && B.result === r && B.phone) || ((myRefs().find((x) => x.ref === r.ref) || {}).d || {}).phone || '';
+  return `<div class="olpay" id="olpay"><b>⚡ Ku bixi ${fee(r.fee)} hal riix</b><p>EVC Plus · Zaad · Sahal — PIN ayaad taleefankaaga ka heli doontaa. Lacagta isla markiiba waa la xaqiijinayaa.</p>
+    <div class="row"><input id="olPh" type="tel" inputmode="numeric" placeholder="061xxxxxxx" value="${esc(ph)}"><button type="button" id="olBtn">💳 Bixi</button></div></div>
+    <div class="or">— ama ku bixi USSD —</div>`;
+}
+function wireOlPay(r, onPaid){
+  const btn = $('olBtn'); if (!btn) return;
+  btn.onclick = async () => {
+    const box = $('olpay'), ph = $('olPh').value.trim();
+    if (BX.normPhone(ph).length < 9){ toast('Geli lambarka taleefanka saxda ah'); return; }
+    const keep = box.innerHTML;
+    box.innerHTML = `<div class="wait"><span class="spin"></span><span>Eeg taleefankaaga 📱<br><small style="font-weight:500">Geli PIN-kaaga si aad u xaqiijiso ${fee(r.fee)}…</small></span></div>`;
+    try { await BX.payOnline(r.ref, ph); r.status = 'paid'; remember(r); toast('✅ Lacagta waa la helay — mahadsanid!'); onPaid(); }
+    catch(e){ box.innerHTML = keep; $('olPh').value = ph; box.insertAdjacentHTML('beforeend', `<div class="err">⚠ ${esc(e.message)}</div>`); wireOlPay(r, onPaid); }
+  };
 }
 function ticketHTML(r){
   const lbl = { pending:'⏳ Lacag sugaya', paid:'✅ La bixiyay', arrived:'🏥 Wuu yimid', cancelled:'✕ La joojiyay' }[r.status] || r.status;
@@ -528,8 +555,8 @@ async function check(ref){
   if (!/^BX-/.test(ref)) ref = 'BX-' + ref.replace(/^BX/,'');
   $('chkRef').value = ref; $('chkRes').innerHTML = '<div style="color:#cfe4ec">Waa la raadinayaa…</div>';
   try { const r = await BX.lookup(ref); if (r) remember(r);
-    $('chkRes').innerHTML = r ? `<div style="max-width:420px">${ticketHTML(r)}<button class="btn btn-white block" id="chkPdf">📄 Soo deji rasiidka (PDF)</button>${r.status==='pending' ? '<p style="font-size:12.5px;color:#cfe4ec;margin:8px 0 0">Rasiidka “La bixiyay” wuxuu diyaar noqonayaa marka isbitaalku xaqiijiyo lacagta.</p>' : ''}</div>` : '<div style="color:#fecaca">Ballankan lama helin. Hubi lambarka.</div>';
-    if (r) $('chkPdf').onclick = (e) => getPDF(r, e.currentTarget); }
+    $('chkRes').innerHTML = r ? `<div style="max-width:420px">${ticketHTML(r)}<button class="btn btn-white block" id="chkPdf">📄 Soo deji rasiidka (PDF)</button>${r.status==='pending' && S.online_pay ? '<div style="margin-top:10px">' + olPayHTML(r).replace(/<div class="or">.*?<\/div>/,'') + '</div>' : ''}${r.status==='pending' ? '<p style="font-size:12.5px;color:#cfe4ec;margin:8px 0 0">Rasiidka “La bixiyay” wuxuu diyaar noqonayaa marka lacagta la xaqiijiyo.</p>' : ''}</div>` : '<div style="color:#fecaca">Ballankan lama helin. Hubi lambarka.</div>';
+    if (r){ $('chkPdf').onclick = (e) => getPDF(r, e.currentTarget); wireOlPay(r, () => check(r.ref)); } }
   catch(e){ $('chkRes').innerHTML = `<div style="color:#fecaca">${esc(e.message)}</div>`; }
 }
 

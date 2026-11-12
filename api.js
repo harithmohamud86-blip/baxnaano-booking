@@ -12,7 +12,7 @@
     hospital_name: 'Baxnaano Hospital', tagline: 'Treatment and beyond',
     phones: [], whatsapp: '252613490055', email: '', address: 'Muqdisho, Soomaaliya',
     open_time: '08:00', close_time: '19:00', slot_minutes: 15,
-    ussd_prefix: '*712*', ussd_number: '684003333', booking_open: true, announcement: ''
+    ussd_prefix: '*712*', ussd_number: '684003333', booking_open: true, announcement: '', online_pay: false, sms_enabled: false
   };
   const ERRORS = {
     BOOKING_CLOSED: 'Ballamaha online-ka hadda waa xidhan yihiin. Fadlan wac isbitaalka.',
@@ -34,6 +34,8 @@
   const fromMin = (n) => String(Math.floor(n / 60)).padStart(2, '0') + ':' + String(n % 60).padStart(2, '0');
   function mogNow() { const d = new Date(Date.now() + TZ_OFFSET_MIN * 60000); return { date: d.toISOString().slice(0, 10), min: d.getUTCHours() * 60 + d.getUTCMinutes(), dow: d.getUTCDay() }; }
   function addDays(iso, n) { const d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+  const STAFF_DOMAIN = 'staff.baxnaano.com';
+  const loginEmail = (l) => { l = String(l || '').trim().toLowerCase(); return l.includes('@') ? l : l + '@' + STAFF_DOMAIN; };
   function normPhone(p) { let d = String(p || '').replace(/\D/g, ''); if (d.startsWith('252')) d = d.slice(3); if (d && d[0] !== '0') d = '0' + d; return d; }
 
   /* ---------------- LIVE (Supabase) ---------------- */
@@ -64,7 +66,15 @@
     async lookup(ref) { const c = await sb(); return q(c.rpc('get_booking', { p_ref: ref })); },
     // ---- staff ----
     async session() { const c = await sb(); const { data } = await c.auth.getSession(); return data.session; },
-    async login(email, password) { const c = await sb(); const { data, error } = await c.auth.signInWithPassword({ email, password }); if (error) throw new Error('Email ama password khaldan.'); const ok = await q(c.rpc('is_staff')); if (!ok) { await c.auth.signOut(); throw new Error('Akoonkan looma oggola admin-ka. Ku dar email-ka miiska "staff".'); } return data.session; },
+    async login(email, password) { const c = await sb(); const { data, error } = await c.auth.signInWithPassword({ email: loginEmail(email), password }); if (error) throw new Error('Username/email ama password khaldan.'); const ok = await q(c.rpc('is_staff')); if (!ok) { await c.auth.signOut(); throw new Error('Akoonkan looma oggola ama waa la xiray. La xiriir maamulka.'); } return data.session; },
+    async me() { const c = await sb(); return q(c.rpc('my_staff')); },
+    async staff(action, payload) { const c = await sb(); const { data: { session } } = await c.auth.getSession();
+      const r = await fetch(CFG.supabaseUrl + '/functions/v1/bx-staff', { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: CFG.supabaseAnonKey, Authorization: 'Bearer ' + (session ? session.access_token : '') }, body: JSON.stringify(Object.assign({ action }, payload || {})) }).catch(() => { throw friendly('Failed to fetch'); });
+      const j = await r.json().catch(() => ({})); if (!j.ok) throw new Error(j.error || 'Khalad'); return j; },
+    async bookingLog(id) { const c = await sb(); return q(c.from('booking_log').select('*').eq('booking_id', id).order('at')); },
+    async payOnline(ref, phone) {
+      const r = await fetch(CFG.supabaseUrl + '/functions/v1/bx-pay', { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: CFG.supabaseAnonKey }, body: JSON.stringify({ ref, phone }) }).catch(() => { throw friendly('Failed to fetch'); });
+      const j = await r.json().catch(() => ({})); if (!j.ok) throw new Error(j.error || 'Lacag bixintu ma dhicin.'); return j; },
     async logout() { const c = await sb(); await c.auth.signOut(); },
     async allDoctors() { const c = await sb(); return q(c.from('doctors').select('*').order('sort_order').order('name')); },
     async saveDoctor(d) { const c = await sb(); const row = Object.assign({}, d); if (!row.id) delete row.id; return q(c.from('doctors').upsert(row).select().single()); },
@@ -119,14 +129,22 @@
     },
     async lookup(ref) { const b = load(K.b, []).find((x) => x.ref === String(ref).trim().toUpperCase()); return delay(b ? { ref: b.ref, doctor: b.doctor_name, specialty: b.specialty, patient: b.patient_name.split(' ')[0], date: b.visit_date, time: b.visit_time, queue: b.queue_number, fee: b.fee, status: b.status } : null); },
     async session() { return load(K.a, null); },
-    async login(email, password) { if (!email || !password) throw new Error('Geli email iyo password.'); const s = { user: { email } }; save(K.a, s); return s; },
+    async login(email, password) { if (!email || !password) throw new Error('Geli email iyo password.'); const s = { user: { email: loginEmail(email) } }; save(K.a, s); return s; },
+    async me() { const s = load(K.a, null); return s ? { email: s.user.email, full_name: 'Demo Admin', role: 'admin' } : null; },
+    async staff(action, p) { let l = load('bx_demo_staff', [{ email: 'admin@demo', full_name: 'Demo Admin', role: 'admin', active: true, has_login: true, created_at: new Date().toISOString() }]);
+      if (action === 'create') { const e = loginEmail(p.login); l = l.filter((x) => x.email !== e); l.push({ email: e, full_name: p.full_name, role: p.role || 'reception', active: true, has_login: true, created_at: new Date().toISOString() }); }
+      if (action === 'set_active') l.forEach((x) => { if (x.email === loginEmail(p.login)) x.active = !!p.active; });
+      if (action === 'set_role') l.forEach((x) => { if (x.email === loginEmail(p.login)) x.role = p.role; });
+      save('bx_demo_staff', l); return delay({ ok: true, staff: l }); },
+    async bookingLog(id) { const b = load(K.b, []).find((x) => x.id === id); return delay(b ? [{ action: 'booked', by_who: 'website', at: b.created_at }].concat(b.paid_at ? [{ action: 'paid', by_who: b.paid_by || 'Demo Admin', at: b.paid_at }] : []) : []); },
+    async payOnline(ref) { await delay(0); await new Promise((r) => setTimeout(r, 2500)); const l = load(K.b, []); const b = l.find((x) => x.ref === ref); if (!b) throw new Error('Ballankan lama helin.'); b.status = 'paid'; b.paid_at = new Date().toISOString(); b.paid_by = 'WaafiPay (auto)'; b.payment_method = 'waafipay'; save(K.b, l); return { ok: true, status: 'paid' }; },
     async logout() { localStorage.removeItem(K.a); },
     async allDoctors() { return delay(dDoctors().slice().sort((a, b) => a.sort_order - b.sort_order)); },
     async saveDoctor(d) { const l = dDoctors(); const row = Object.assign({ id: uid(), work_days: [0, 1, 2, 3, 4, 5, 6], daily_limit: 40, active: true, sort_order: l.length + 1 }, d); if (!d.id) row.id = uid(); const i = l.findIndex((x) => x.id === row.id); if (i >= 0) l[i] = row; else l.push(row); save(K.d, l); return delay(row); },
     async deleteDoctor(id) { const l = dDoctors(); const d = l.find((x) => x.id === id); if (d) d.active = false; save(K.d, l); return delay(true); },
     async uploadPhoto(file) { return new Promise((res) => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(file); }); },
     async bookings(from, to) { return delay(load(K.b, []).filter((b) => b.visit_date >= from && b.visit_date <= to).sort((a, b) => (a.visit_date + a.visit_time + String(a.queue_number).padStart(3, '0')).localeCompare(b.visit_date + b.visit_time + String(b.queue_number).padStart(3, '0')))); },
-    async setStatus(id, status) { const l = load(K.b, []); const b = l.find((x) => x.id === id); if (b) { b.status = status; if ((status === 'paid' || status === 'arrived') && !b.paid_at) b.paid_at = new Date().toISOString(); if (status === 'paid') { b.odoo_status = 'sent'; b.odoo_appointment_id = 1000 + l.indexOf(b); } } save(K.b, l); return delay(b); },
+    async setStatus(id, status) { const l = load(K.b, []); const b = l.find((x) => x.id === id); if (b) { b.status = status; if ((status === 'paid' || status === 'arrived') && !b.paid_at) b.paid_at = new Date().toISOString(); if (status === 'paid') { b.paid_by = b.paid_by || 'Demo Admin'; b.odoo_status = 'sent'; b.odoo_appointment_id = 1000 + l.indexOf(b); } } save(K.b, l); return delay(b); },
     async saveSettings(s) { save(K.s, Object.assign({}, load(K.s, {}), s)); return delay(true); },
     async resendOdoo(id) { return demo.setStatus(id, 'paid'); },
     async watchBookings() { return null; }

@@ -43,6 +43,10 @@ td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
 tr:last-child td{border:0}
 .q{font-weight:800;font-size:16px;color:var(--brand)}
 .muted{color:var(--muted);font-size:12.5px}
+.by{font-size:11px;color:var(--muted);margin-top:4px}.auto{display:inline-block;margin-left:4px;padding:2px 7px;border-radius:999px;background:#e0e7ff;color:#3730a3;font-size:10.5px;font-weight:700}
+.role{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;background:#dcf5e8;color:#0e7a4c}.role.admin{background:#fde68a;color:#7c4a03}.off .role{opacity:.5}
+.note{background:#f1f5f9;border-radius:12px;padding:10px 12px;font-size:12.5px;color:var(--muted);margin:6px 0 14px}
+.log li{margin:8px 0;font-size:14px}.log small{color:var(--muted)}
 .st{display:inline-block;padding:4px 9px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap}
 .st.pending{background:#fff4d6;color:#8a5a00}.st.paid{background:#dcf5e8;color:#0e7a4c}.st.arrived{background:#dbeafe;color:#1d4ed8}.st.cancelled{background:#fde2e4;color:#9b2c35}
 .od{display:inline-block;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:700}
@@ -96,7 +100,7 @@ tr:last-child td{border:0}
     <img src="icon-192.png" alt=""><h2>Admin</h2><p>Baxnaano Online Booking</p>
     <div class="err" id="loginErr" hidden></div>
     <form id="loginForm">
-      <div class="f"><label for="lEmail">Email</label><input id="lEmail" type="email" autocomplete="username" required></div>
+      <div class="f"><label for="lEmail">Username ama Email</label><input id="lEmail" type="text" autocapitalize="none" autocomplete="username" placeholder="tusaale: fadumo" required></div>
       <div class="f"><label for="lPass">Password</label><input id="lPass" type="password" autocomplete="current-password" required></div>
       <button class="btn btn-main" style="width:100%;padding:13px" type="submit" id="lBtn">Gal</button>
     </form>
@@ -107,7 +111,7 @@ tr:last-child td{border:0}
 <div id="appView" hidden>
   <header class="top"><div class="in"><img src="icon-192.png" alt=""><div><b id="tName">Baxnaano Hospital</b><small>Admin · Ballamaha online-ka</small></div>
     <div class="sp"><span id="who"></span><a href="./" target="_blank" style="color:#fff">Bogga ↗</a><button id="logout">Ka bax</button></div></div></header>
-  <nav class="tabs"><button class="tab on" data-t="bk">📋 Ballamaha</button><button class="tab" data-t="dr">🩺 Dhakhaatiirta</button><button class="tab" data-t="st">⚙️ Dejinta</button></nav>
+  <nav class="tabs"><button class="tab on" data-t="bk">📋 Ballamaha</button><button class="tab" data-t="dr">🩺 Dhakhaatiirta</button><button class="tab" data-t="st">⚙️ Dejinta</button><button class="tab" data-t="sf">👥 Shaqaalaha</button></nav>
   <main>
     <section id="t-bk">
       <div class="stats" id="stats"></div>
@@ -131,6 +135,10 @@ tr:last-child td{border:0}
     <section id="t-st" hidden>
       <form class="card" id="setForm">
         <div class="sw" style="margin-bottom:14px"><input type="checkbox" id="sOpen"><label for="sOpen">Ballamaha online-ka waa furan yihiin</label></div>
+        <div class="sw"><input type="checkbox" id="sPay"><label for="sPay">💳 Lacag bixin toos ah (EVC / Zaad / Sahal — WaafiPay)</label></div>
+        <div class="note">Shid kaliya marka furayaasha WaafiPay la geliyo Supabase. Bukaanku wuxuu taleefankiisa ka helayaa PIN; markuu bixiyo ballanku si toos ah ayuu "✅ La bixiyay" u noqonayaa.</div>
+        <div class="sw"><input type="checkbox" id="sSms"><label for="sSms">📩 SMS toos ah (ballan, lacag, xusuusin subaxdii 6:30)</label></div>
+        <div class="note">Shid kaliya marka akoonka Hormuud SMS la geliyo Supabase.</div>
         <div class="g2">
           <div class="f"><label>Magaca isbitaalka</label><input id="sName"></div>
           <div class="f"><label>Hal-ku-dhig</label><input id="sTag"></div>
@@ -147,6 +155,21 @@ tr:last-child td{border:0}
         <div class="f"><label>Ogeysiis (wuxuu ka muuqanayaa bogga sare)</label><textarea id="sAnn" rows="2"></textarea></div>
         <button class="btn btn-main" type="submit">💾 Kaydi</button>
       </form>
+    </section>
+
+    <section id="t-sf" hidden>
+      <form class="card" id="sfForm" style="margin-bottom:14px">
+        <h3 style="margin-top:0">➕ Shaqaale cusub</h3>
+        <div class="g2">
+          <div class="f"><label>Magaca</label><input id="sfName" required placeholder="Fadumo Cali"></div>
+          <div class="f"><label>Username (ama email)</label><input id="sfLogin" required autocapitalize="none" placeholder="fadumo"></div>
+          <div class="f"><label>Password (ugu yaraan 8)</label><input id="sfPass" required minlength="8" autocomplete="new-password"></div>
+          <div class="f"><label>Doorka</label><select id="sfRole"><option value="reception">Reception — ballamaha kaliya</option><option value="admin">Admin — wax walba</option></select></div>
+        </div>
+        <button class="btn btn-main" type="submit">➕ Samee akoon</button>
+        <div class="note" style="margin-top:12px">Reception: wuxuu arkaa ballamaha, wuxuu calaamadin karaa ✅ Bixiyay / 🏥 Yimid / ✕. Ma bedeli karo dhakhaatiirta, qiimaha ama dejinta. Wax kasta oo uu sameeyo magaciisa ayaa lagu qorayaa.</div>
+      </form>
+      <div class="docs" id="sfList"></div>
     </section>
   </main>
 </div>
@@ -172,6 +195,7 @@ tr:last-child td{border:0}
   <div class="sw" style="margin-bottom:14px"><input type="checkbox" id="dActive"><label for="dActive">Wuxuu ka muuqdaa bogga</label></div>
   <div class="acts"><button class="btn btn-line" type="button" id="dCancel">Ka noqo</button><button class="btn btn-main" type="submit" style="margin-left:auto">💾 Kaydi</button></div>
 </form></div>
+<div class="ov" id="logOv" hidden><div class="modal"><h3 id="logT" style="margin-top:0">Taariikhda ballanka</h3><ul class="log" id="logL"></ul><button class="btn btn-line" id="logX" type="button">Xir</button></div></div>
 <div class="toast" id="toast"></div>
 
 <script src="config.js"></script>
@@ -184,7 +208,9 @@ const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({'&':'
 const WEEK = ['Axad','Isniin','Talaado','Arbaco','Khamiis','Jimce','Sabti'];
 const ST = { pending:'⏳ Lacag sugaya', paid:'✅ La bixiyay', arrived:'🏥 Yimid', cancelled:'✕ La joojiyay' };
 const OD = { waiting:'Sugaya', sent:'✓ Odoo', error:'⚠ Khalad' };
-let S = {}, DOCS = [], ROWS = [], editing = null;
+let S = {}, DOCS = [], ROWS = [], editing = null, ME = null;
+const WHEN = (iso) => { if (!iso) return ''; const d = new Date(new Date(iso).getTime() + 180*60000); return `${d.getUTCDate()}/${d.getUTCMonth()+1} ${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}`; };
+const ACT = { booked:'📝 Ballan la sameeyay', pending:'⏳ Dib loogu celiyay sugitaan', paid:'✅ Lacag la bixiyay', arrived:'🏥 Bukaanku yimid', cancelled:'✕ La joojiyay' };
 function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2800); }
 function t12(t){ const [h,m] = String(t||'').slice(0,5).split(':').map(Number); return isNaN(h) ? '' : `${((h+11)%12)+1}:${String(m).padStart(2,'0')} ${h>=12?'PM':'AM'}`; }
 const ini = (n) => String(n||'').replace(/^dr\.?\s*/i,'').split(/\s+/).slice(0,2).map((w) => w[0]||'').join('').toUpperCase();
@@ -194,7 +220,12 @@ const av = (d) => d.photo_url ? `<img src="${esc(d.photo_url)}" alt="">` : esc(i
 async function start(){
   $('demoTag').hidden = BX.LIVE;
   const s = await BX.session().catch(() => null);
-  if (s){ $('who').textContent = s.user && s.user.email || ''; $('loginView').hidden = true; $('appView').hidden = false; await loadAll(); }
+  if (s){
+    ME = await BX.me().catch(() => null) || { email: s.user && s.user.email, role: 'reception' };
+    $('who').textContent = `${ME.full_name || ME.email} · ${ME.role === 'admin' ? 'Admin' : 'Reception'}`;
+    document.querySelectorAll('.tab').forEach((t) => { if (t.dataset.t !== 'bk') t.hidden = ME.role !== 'admin'; });
+    $('loginView').hidden = true; $('appView').hidden = false; await loadAll();
+  }
   else { $('appView').hidden = true; $('loginView').hidden = false; }
 }
 $('loginForm').onsubmit = async (e) => {
@@ -208,7 +239,8 @@ $('logout').onclick = async () => { await BX.logout(); location.reload(); };
 /* ---------- tabs ---------- */
 document.querySelectorAll('.tab').forEach((t) => t.onclick = () => {
   document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('on', x === t));
-  ['bk','dr','st'].forEach((k) => $('t-'+k).hidden = k !== t.dataset.t);
+  ['bk','dr','st','sf'].forEach((k) => $('t-'+k).hidden = k !== t.dataset.t);
+  if (t.dataset.t === 'sf') loadStaff();
 });
 
 /* ---------- load ---------- */
@@ -237,13 +269,13 @@ function renderRows(){
     <td class="full"><b>${esc(b.patient_name)}</b><div class="muted">${esc(b.phone)} · ${b.age ?? '–'} sano · ${b.gender==='male'?'Lab':b.gender==='female'?'Dhedig':'–'}${b.district ? ' · '+esc(b.district) : ''}${b.is_returning ? ' · horay u yimid' : ' · cusub'}</div>${b.notes ? `<div class="muted">📝 ${esc(b.notes)}</div>` : ''}<div class="muted">${esc(b.ref)}</div></td>
     <td class="full">${esc(b.doctor_name)}<div class="muted">$${Number(b.fee)}</div></td>
     <td class="full">${t12(b.visit_time)}</td>
-    <td class="full"><span class="st ${b.status}">${ST[b.status]}</span></td>
+    <td class="full"><span class="st ${b.status}">${ST[b.status]}</span>${b.payment_method === 'waafipay' ? '<span class="auto">💳 Auto</span>' : ''}${b.paid_by ? `<div class="by">✓ ${esc(b.paid_by)} · ${WHEN(b.paid_at)}</div>` : ''}${b.updated_by && b.updated_by !== b.paid_by && b.status !== 'pending' ? `<div class="by">↻ ${esc(b.updated_by)}</div>` : ''}</td>
     <td class="full"><span class="od ${b.odoo_status}" title="${esc(b.odoo_error||'')}">${OD[b.odoo_status]||b.odoo_status}</span>${b.odoo_status==='error' ? ` <button class="btn btn-line sm" data-odoo="${b.id}">↻</button>` : ''}</td>
     <td class="full"><div class="acts">
       ${b.status==='pending' ? `<button class="btn btn-ok sm" data-s="paid" data-id="${b.id}">✅ Bixiyay</button>` : ''}
       ${b.status==='paid' ? `<button class="btn btn-blue sm" data-s="arrived" data-id="${b.id}">🏥 Yimid</button>` : ''}
       ${b.status!=='cancelled' && b.status!=='arrived' ? `<button class="btn btn-bad sm" data-s="cancelled" data-id="${b.id}">✕</button>` : ''}
-      <button class="btn btn-line sm" data-rx="${b.id}" title="Rasiid PDF">📄</button>
+      <button class="btn btn-line sm" data-rx="${b.id}" title="Rasiid PDF">📄</button><button class="btn btn-line sm" data-log="${b.id}" title="Taariikhda">🕘</button>
       <a class="btn btn-line sm" target="_blank" rel="noopener" href="https://wa.me/252${esc(String(b.phone).replace(/^0/,''))}?text=${encodeURIComponent(`Salaan ${b.patient_name}, ballankaaga ${b.ref} ee ${b.doctor_name}: ${t12(b.visit_time)}, safka #${b.queue_number}. ${S.hospital_name}`)}">💬</a>
     </div></td></tr>`).join('') || `<tr><td colspan="7" class="empty">Ballan lama helin maalintan.</td></tr>`;
 }
@@ -253,6 +285,9 @@ $('fDate').onchange = loadBookings;
 $('refresh').onclick = loadBookings;
 $('rows').onclick = async (e) => {
   const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.log){ const x = ROWS.find((r) => r.id === b.dataset.log); try { const L = await BX.bookingLog(b.dataset.log);
+      $('logT').textContent = `${x.ref} · ${x.patient_name}`;
+      $('logL').innerHTML = L.map((l) => `<li><b>${ACT[l.action] || esc(l.action)}</b><br><small>${esc(l.by_who || '—')} · ${WHEN(l.at)}</small></li>`).join('') || '<li>—</li>'; $('logOv').hidden = false; } catch(err){ toast(err.message); } return; }
   if (b.dataset.rx){ const x = ROWS.find((r) => r.id === b.dataset.rx); if (!x) return; b.disabled = true;
     try { await BXReceipt.pdf({ ref:x.ref, patient:x.patient_name, phone:x.phone, age:x.age, gender:x.gender, district:x.district, returning:x.is_returning, doctor:x.doctor_name, specialty:x.specialty, date:x.visit_date, time:x.visit_time, queue:x.queue_number, fee:x.fee, status:x.status, paid_at:x.paid_at, created_at:x.created_at }, S); } catch(err){ toast(err.message); }
     b.disabled = false; return; }
@@ -305,19 +340,49 @@ $('docForm').onsubmit = async (e) => {
 
 /* ---------- settings ---------- */
 function fillSettings(){
-  $('sOpen').checked = !!S.booking_open; $('sName').value = S.hospital_name || ''; $('sTag').value = S.tagline || '';
+  $('sOpen').checked = !!S.booking_open; $('sPay').checked = !!S.online_pay; $('sSms').checked = !!S.sms_enabled; $('sName').value = S.hospital_name || ''; $('sTag').value = S.tagline || '';
   $('sPhones').value = (S.phones || []).join(', '); $('sWa').value = S.whatsapp || ''; $('sEmail').value = S.email || ''; $('sAddr').value = S.address || '';
   $('sOpenT').value = String(S.open_time||'').slice(0,5); $('sClose').value = String(S.close_time||'').slice(0,5); $('sSlot').value = S.slot_minutes;
   $('sUssd').value = S.ussd_prefix || ''; $('sUssdN').value = S.ussd_number || ''; $('sAnn').value = S.announcement || '';
 }
 $('setForm').onsubmit = async (e) => {
   e.preventDefault();
-  const s = { booking_open: $('sOpen').checked, hospital_name: $('sName').value.trim(), tagline: $('sTag').value.trim(),
+  const s = { booking_open: $('sOpen').checked, online_pay: $('sPay').checked, sms_enabled: $('sSms').checked, hospital_name: $('sName').value.trim(), tagline: $('sTag').value.trim(),
     phones: $('sPhones').value.split(',').map((x) => x.trim()).filter(Boolean), whatsapp: $('sWa').value.replace(/\D/g,''), email: $('sEmail').value.trim() || null,
     address: $('sAddr').value.trim(), open_time: $('sOpenT').value, close_time: $('sClose').value, slot_minutes: +$('sSlot').value || 15,
     ussd_prefix: $('sUssd').value.trim(), ussd_number: $('sUssdN').value.replace(/\D/g,''), announcement: $('sAnn').value.trim() || null };
   try { await BX.saveSettings(s); S = Object.assign(S, s); $('tName').textContent = S.hospital_name; toast('💾 Dejinta waa la kaydiyay'); } catch(err){ toast(err.message); }
 };
+
+/* ---------- staff ---------- */
+async function loadStaff(){
+  try { const r = await BX.staff('list'); $('sfList').innerHTML = r.staff.map((x) => `<div class="dc ${x.active?'':'off'}"><span class="av">${esc((x.full_name||x.email)[0].toUpperCase())}</span><div style="min-width:0">
+      <b>${esc(x.full_name || '—')}</b> <span class="role ${x.role}">${x.role === 'admin' ? 'Admin' : 'Reception'}</span>
+      <div class="muted">${esc(x.email.replace('@staff.baxnaano.com',''))}${x.active ? '' : ' · 🔒 xiran'}</div>
+      <div class="muted">${x.last_sign_in_at ? 'Galay: ' + WHEN(x.last_sign_in_at) : (x.has_login ? 'Weli ma galin' : '⚠ Password ma laha')}</div></div>
+      ${ME && x.email.toLowerCase() === String(ME.email).toLowerCase() ? '<span class="muted r">(adiga)</span>' : `<div class="acts r" style="flex-direction:column">
+        <button class="btn btn-line sm" data-pw="${esc(x.email)}">🔑</button>
+        <button class="btn btn-line sm" data-act="${esc(x.email)}" data-v="${x.active?0:1}">${x.active ? '🔒' : '🔓'}</button>
+        <button class="btn btn-line sm" data-role="${esc(x.email)}" data-v="${x.role === 'admin' ? 'reception' : 'admin'}">${x.role === 'admin' ? '⬇' : '⬆'}</button></div>`}
+    </div>`).join(''); } catch(err){ toast(err.message); }
+}
+$('sfForm').onsubmit = async (e) => {
+  e.preventDefault(); const btn = e.submitter; if (btn) btn.disabled = true;
+  try { const r = await BX.staff('create', { full_name: $('sfName').value.trim(), login: $('sfLogin').value.trim(), password: $('sfPass').value, role: $('sfRole').value });
+    toast(`✅ Akoon waa la sameeyay — username: ${$('sfLogin').value.trim()}`); $('sfForm').reset(); loadStaff(); }
+  catch(err){ toast(err.message); }
+  if (btn) btn.disabled = false;
+};
+$('sfList').onclick = async (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  try {
+    if (b.dataset.pw){ const pw = prompt('Password cusub (ugu yaraan 8 xaraf):'); if (!pw) return; await BX.staff('reset_password', { login: b.dataset.pw, password: pw }); toast('🔑 Password waa la bedelay'); }
+    if (b.dataset.act){ if (b.dataset.v === '0' && !confirm('Ma xiraysaa akoonkan? Ma soo gali karo ilaa aad furto.')) return; await BX.staff('set_active', { login: b.dataset.act, active: b.dataset.v === '1' }); toast('Waa la cusboonaysiiyay'); }
+    if (b.dataset.role){ await BX.staff('set_role', { login: b.dataset.role, role: b.dataset.v }); toast('Doorka waa la bedelay'); }
+    loadStaff();
+  } catch(err){ toast(err.message); }
+};
+$('logX').onclick = () => $('logOv').hidden = true;
 
 start();
 })();
