@@ -146,6 +146,33 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 footer .brand b{color:#fff}
 footer a{color:#fff}
 
+
+@media(max-width:899px){
+  .hero .wrap{padding-top:22px;padding-bottom:26px;gap:0}
+  .hero h1{font-size:28px;margin:10px 0 14px;max-width:none}
+  .hero p.lead{display:none}
+  .hero-card,.hero-meta{display:none}
+  .cta .btn{padding:12px 16px;font-size:14.5px}
+}
+
+@media(max-width:600px){
+  #dhakhaatiirta .sec-h{margin-bottom:12px} #dhakhaatiirta .sec-h p,#dhakhaatiirta .kick{display:none}
+  .wa-fab{width:50px;height:50px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom))} .wa-fab svg{width:26px;height:26px}
+  .docs{padding-bottom:40px} #dhakhaatiirta .sec-h h2{font-size:23px}
+  #dhakhaatiirta .tools{margin-bottom:10px} .search input{padding:11px 12px 11px 40px;font-size:15px}
+  .docs{grid-template-columns:1fr;gap:10px;margin-top:10px!important}
+  .doc{flex-direction:row;border-radius:18px}
+  .doc .ph{flex:0 0 104px;aspect-ratio:auto;min-height:118px}
+  .doc .ph .ini{font-size:34px}
+  .doc .tag{left:6px;top:6px;padding:3px 8px;font-size:11px} .doc .tag .tl{display:none}
+  .doc .bd{padding:11px 12px;gap:5px;min-width:0}
+  .doc h3{font-size:15.5px;line-height:1.25}
+  .doc .sp{font-size:11.5px;padding:3px 8px}
+  .doc .bio{display:none}
+  .doc .ft{padding-top:7px}
+  .doc .price{font-size:19px}
+  .doc .ft .btn{padding:9px 14px;font-size:14px}
+}
 /* booking sheet */
 .ov{position:fixed;inset:0;z-index:80;background:rgba(10,25,36,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
 .ov.open{opacity:1;pointer-events:auto}
@@ -215,7 +242,7 @@ footer a{color:#fff}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#"><img src="icon-192.png" alt=""><span><b id="hName">Baxnaano Hospital</b><small id="hTag">Treatment and beyond</small></span></a>
-    <nav class="nav"><a href="#dhakhaatiirta">Dhakhaatiirta</a><a href="#sida">Sida loo ballansado</a><a href="#hubi">Hubi ballan</a><a href="#xiriir">Xiriir</a></nav>
+    <nav class="nav"><a href="#dhakhaatiirta">Dhakhaatiirta</a><a href="#hubi">Hubi ballan</a><a href="#sida">Sida loo ballansado</a><a href="#xiriir">Xiriir</a></nav>
     <a class="call" id="hCall" href="#xiriir">📞 <span>Wac</span></a>
   </div>
 </header>
@@ -226,7 +253,7 @@ footer a{color:#fff}
     <div>
       <span class="badge"><span class="dot" id="openDot"></span><span id="openTxt">Ballan online ah</span></span>
       <h1>Ballanso dhakhtarkaaga <em>adigoo meel kasta jooga</em></h1>
-      <p class="lead">Dooro dhakhtarka, geli xogta bukaanka, kuna bixi taleefankaaga. Lambarkaaga safka iyo waqtigaaga isla markiiba ayaad helaysaa.</p>
+      <p class="lead">Dooro dhakhtarka hoose, ballanso, hel lambarka safka — isla markiiba.</p>
       <div class="cta">
         <a class="btn btn-white" href="#dhakhaatiirta">🩺 Ballanso hadda</a>
         <a class="btn btn-ghost" href="#hubi">🔎 Hubi ballankaaga</a>
@@ -244,20 +271,9 @@ footer a{color:#fff}
   </div>
 </section>
 
-<section class="sec" id="sida">
+<section class="sec" id="dhakhaatiirta" style="padding-top:22px">
   <div class="wrap">
-    <div class="sec-h rv"><span class="kick">3 tallaabo</span><h2>Sida loo ballansado</h2><p>Ballankaagu wuxuu qaadanayaa hal daqiiqo keliya.</p></div>
-    <div class="steps">
-      <div class="step rv"><div class="n">1</div><h3>Dooro dhakhtar</h3><p>Raadi takhasuska aad u baahan tahay oo dooro dhakhtarka.</p></div>
-      <div class="step rv"><div class="n">2</div><h3>Xogta bukaanka</h3><p>Geli magaca, taleefanka, da'da iyo jinsiga bukaanka.</p></div>
-      <div class="step rv"><div class="n">3</div><h3>Xaqiiji &amp; bixi</h3><p>Hel lambarka safka, kadibna ku bixi taleefankaaga (USSD).</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="dhakhaatiirta" style="padding-top:10px">
-  <div class="wrap">
-    <div class="sec-h rv"><span class="kick">Dhakhaatiirta</span><h2>Dooro dhakhtarkaaga</h2><p>Dhakhaatiir khibrad leh oo diyaar kuu ah.</p></div>
+    <div class="sec-h"><span class="kick">⚡ Ballanso hadda</span><h2>Dooro dhakhtarkaaga</h2><p>Riix <b>Ballanso</b> — hal daqiiqo ayay qaadanaysaa.</p></div>
     <div class="tools"><div class="search"><input id="q" type="search" placeholder="Raadi dhakhtar ama takhasus…" aria-label="Raadi"></div></div>
     <div class="chips" id="chips"></div>
     <div class="docs" id="docs" style="margin-top:14px"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
@@ -271,6 +287,17 @@ footer a{color:#fff}
         <div class="mine" id="mine"></div></div>
       <form id="chkForm"><input id="chkRef" placeholder="BX-XXXXXX" autocomplete="off" maxlength="9"><button class="btn btn-white" type="submit">Hubi</button></form>
       <div class="res" id="chkRes"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="sida">
+  <div class="wrap">
+    <div class="sec-h rv"><span class="kick">3 tallaabo</span><h2>Sida loo ballansado</h2><p>Ballankaagu wuxuu qaadanayaa hal daqiiqo keliya.</p></div>
+    <div class="steps">
+      <div class="step rv"><div class="n">1</div><h3>Dooro dhakhtar</h3><p>Raadi takhasuska aad u baahan tahay oo dooro dhakhtarka.</p></div>
+      <div class="step rv"><div class="n">2</div><h3>Xogta bukaanka</h3><p>Geli magaca, taleefanka, da'da iyo jinsiga bukaanka.</p></div>
+      <div class="step rv"><div class="n">3</div><h3>Xaqiiji &amp; bixi</h3><p>Hel lambarka safka, kadibna ku bixi taleefankaaga (USSD).</p></div>
     </div>
   </div>
 </section>
@@ -369,7 +396,7 @@ function renderDocs(){
     const days = (d.work_days||[]).length === 7 ? 'Maalin kasta' : (d.work_days||[]).map((x) => WEEK[x]).join(', ');
     return `<article class="doc rv in">
       <div class="ph">${d.photo_url ? `<img src="${esc(d.photo_url)}" alt="${esc(d.name)}" loading="lazy" onerror="this.remove()">` : ''}<span class="ini" ${d.photo_url?'style="z-index:-1"':''}>${esc(ini(d.name))}</span>
-        <span class="tag ${today?'':'away'}">${today ? '● Maanta wuu joogaa' : '○ Maanta ma joogo'}</span></div>
+        <span class="tag ${today?'':'away'}">${today ? '● Maanta<span class="tl"> wuu joogaa</span>' : '○ Maanta<span class="tl"> ma joogo</span>'}</span></div>
       <div class="bd"><h3>${esc(d.name)}</h3><span class="sp">${esc(d.specialty)}</span>
         ${d.bio ? `<p class="bio">${esc(d.bio)}</p>` : ''}<p class="bio">📅 ${esc(days)}</p>
         <div class="ft"><div class="price">${fee(d.fee)} <small>/ballan</small></div><button class="btn btn-main" data-id="${d.id}">Ballanso</button></div></div>
@@ -498,7 +525,7 @@ async function boot(){
   renderChrome(); renderMine();
   try { S = await BX.settings(); renderChrome(); } catch(e){ console.warn(e); }
   try { DOCS = await BX.doctors(); } catch(e){ DOCS = []; $('docs').innerHTML = `<div class="empty">⚠️ ${esc(e.message)}</div>`; }
-  renderHeroDocs(); renderChips(); if (DOCS.length || !$('docs').querySelector('.empty')) renderDocs();
+  renderHeroDocs(); renderChips(); document.querySelector('.tools').hidden = DOCS.length <= 6; if (DOCS.length || !$('docs').querySelector('.empty')) renderDocs();
   const ref = new URLSearchParams(location.search).get('ref'); if (ref){ location.hash = 'hubi'; check(ref); }
 }
 boot();
