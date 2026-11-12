@@ -387,7 +387,7 @@ function renderChrome(){
 function renderHeroDocs(){
   $('mDocs').textContent = DOCS.length;
   $('mSpecs').textContent = new Set(DOCS.map((d) => d.specialty)).size;
-  $('heroDocs').innerHTML = DOCS.slice(0,3).map((d) => `<button class="hc-doc" data-id="${d.id}"><span class="av">${avatar(d)}</span><span><b>${esc(d.name)}</b><small>${esc(short(d.specialty))}</small></span><span class="fee">${fee(d.fee)}</span></button>`).join('')
+  $('heroDocs').innerHTML = DOCS.slice(0,6).map((d) => `<button class="hc-doc" data-id="${d.id}"><span class="av">${avatar(d)}</span><span><b>${esc(d.name)}</b><small>${esc(short(d.specialty))}</small></span><span class="fee">${fee(d.fee)}</span></button>`).join('')
     || '<div style="color:#cfe4ec;font-size:14px">Dhakhaatiirta waa la soo rarayaa…</div>';
 }
 function renderChips(){
