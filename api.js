@@ -84,7 +84,7 @@
   const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2));
   const SEED = [
     { name: 'Dr. Yahye Shoole', specialty: 'Carruurta (Pediatrician)', fee: 10, photo_url: 'photos/dr-yahye.jpg', odoo_doctor_id: 23, sort_order: 1 },
-    { name: 'Dr. Harith Abdikadir Mohamud', specialty: 'Neerfaha (Neurologist)', fee: 10, photo_url: 'photos/dr-harith.jpg', odoo_doctor_id: 22, sort_order: 2 },
+    { name: 'Dr. Harith Abdikadir Mohamud', specialty: 'Neerfaha (Neurologist)', fee: 10, photo_url: 'photos/dr-harith.jpg', odoo_doctor_id: 22, sort_order: 2, bio: 'Senior Consultant Neurologist · Dhakhtarka neerfaha iyo madaxa\n12+ sano khibrad\n- Madax xanuun (migraine, tension, cluster)\n- Dhabar xanuunka\n- Wareer (vertigo)\n- Dhaga guuxa (tinnitus)\n- Indha kala qallooca neerfaha\n- Faaliga (stroke)\n- Ilmaha kafka ku daaha (cerebral palsy, birth asphyxia)' },
     { name: 'Dr. Hersi', specialty: 'Cudurrada Guud & Uurkujirta', fee: 10, photo_url: 'photos/dr-hersi.jpg', odoo_doctor_id: 49, sort_order: 3 },
     { name: 'Dr. Sadio Omar', specialty: 'Daaweynta Hadalka (Speech Therapy)', fee: 21, photo_url: 'photos/dr-sadio.jpg', odoo_doctor_id: 46, sort_order: 4 }
   ].map((d) => Object.assign({ id: uid(), bio: '', work_days: [0, 1, 2, 3, 4, 5, 6], daily_limit: 40, active: true }, d));
