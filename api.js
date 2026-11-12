@@ -86,7 +86,7 @@
     { name: 'Dr. Yahye Shoole', specialty: 'Carruurta (Pediatrician)', fee: 10, photo_url: 'photos/dr-yahye.jpg', odoo_doctor_id: 23, sort_order: 1, start_time: '07:00', end_time: '19:30' },
     { name: 'Dr. Harith Abdikadir Mohamud', specialty: 'Neerfaha iyo Madaxa (Neurologist)', fee: 10, photo_url: 'photos/dr-harith.jpg', odoo_doctor_id: 22, sort_order: 2, start_time: '07:30', end_time: '18:00', bio: 'Senior Consultant Neurologist · Dhakhtarka neerfaha iyo madaxa\n12+ sano khibrad\n- Madax xanuun (migraine, tension, cluster)\n- Dhabar xanuunka\n- Wareer (vertigo)\n- Dhaga guuxa (tinnitus)\n- Indha kala qallooca neerfaha\n- Faaliga (stroke)\n- Ilmaha kafka ku daaha (cerebral palsy, birth asphyxia)' },
     { name: 'Dr. Abdulkadir Hersi', specialty: 'Cudurrada Guud & Sambabada (Internal Medicine)', fee: 10, photo_url: 'photos/dr-hersi.jpg', odoo_doctor_id: 49, sort_order: 3, start_time: '16:30', end_time: '19:30' },
-    { name: 'Dr. Sadio Omar', specialty: 'Daaweynta Hadalka (Speech Therapy)', fee: 21, photo_url: 'photos/dr-sadio.jpg', odoo_doctor_id: 46, sort_order: 4, start_time: '07:30', end_time: '14:30' }
+    { name: 'Dr. Sadio Omar', specialty: 'Daaweynta Hadalka (Speech Therapy)', fee: 21, photo_url: 'photos/dr-sadio.jpg', odoo_doctor_id: 46, sort_order: 4, start_time: '07:30', end_time: '14:30', daily_limit: 5, slot_minutes: 80 }
   ].map((d) => Object.assign({ id: uid(), bio: '', work_days: [0, 1, 2, 3, 4, 5, 6], daily_limit: 40, active: true }, d));
   const dDoctors = () => { let l = load(K.d, null); if (!l) { l = SEED; save(K.d, l); } return l; };
   const delay = (v) => new Promise((r) => setTimeout(() => r(v), 250));
@@ -98,13 +98,13 @@
       if (!s.booking_open) throw friendly('BOOKING_CLOSED'); if (!d) throw friendly('DOCTOR_NOT_FOUND');
       if (String(p.name || '').trim().length < 3) throw friendly('BAD_NAME');
       const phone = normPhone(p.phone); if (phone.length < 7 || phone.length > 15) throw friendly('BAD_PHONE');
-      const all = load(K.b, []); const now = mogNow(); const slot = +s.slot_minutes || 15;
+      const all = load(K.b, []); const now = mogNow(); const slotH = +s.slot_minutes || 15;
       let date = now.date, time = null, queue = 0;
       for (let i = 0; i < 15 && !time; i++, date = addDays(date, 1)) {
         const dow = new Date(date + 'T00:00:00Z').getUTCDay(); if (!d.work_days.includes(dow)) continue;
         const day = all.filter((b) => b.doctor_id === d.id && b.visit_date === date && b.status !== 'cancelled');
         if (day.length >= d.daily_limit) continue;
-        const op = toMin(d.start_time || s.open_time), cl = toMin(d.end_time || s.close_time);
+        const op = toMin(d.start_time || s.open_time), cl = toMin(d.end_time || s.close_time), slot = +d.slot_minutes || slotH;
         let t = day.length ? Math.max(...day.map((b) => toMin(b.visit_time))) + slot : op;
         if (date === now.date) t = Math.max(t, op + Math.max(0, Math.ceil((now.min - op) / slot)) * slot);
         if (t <= cl - slot) { time = fromMin(t); queue = (day.length ? Math.max(...day.map((b) => b.queue_number)) : 0) + 1; break; }

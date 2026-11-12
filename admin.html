@@ -164,6 +164,7 @@ tr:last-child td{border:0}
     <div class="f"><label>Kala horreynta</label><input id="dSort" type="number"></div>
     <div class="f"><label>Saacadda bilowga</label><input id="dStart" type="time"></div>
     <div class="f"><label>Saacadda dhammaadka</label><input id="dEnd" type="time"></div>
+    <div class="f"><label>Daqiiqo bukaankiiba</label><input id="dSlot" type="number" min="5" max="240" placeholder="15"></div>
   </div>
   <datalist id="specList"><option>Carruurta (Pediatrician)</option><option>Neerfaha (Neurologist)</option><option>Cudurrada Guud (General Medicine)</option><option>Haweenka &amp; Umulaha (Gynecology)</option><option>Lafaha (Orthopedics)</option><option>Wadnaha (Cardiology)</option><option>Indhaha (Ophthalmology)</option><option>Ilkaha (Dentist)</option><option>Maqaarka (Dermatology)</option><option>Dhegaha, Sanka &amp; Cunaha (ENT)</option><option>Daaweynta Hadalka (Speech Therapy)</option><option>Jimicsiga Daaweynta (Physiotherapy)</option></datalist>
   <div class="f"><label>Maalmaha uu shaqeeyo</label><div class="days" id="dDays"></div></div>
@@ -277,7 +278,7 @@ function openDoc(d){
   $('docTitle').textContent = d ? 'Wax ka beddel dhakhtarka' : 'Dhakhtar cusub';
   $('dName').value = editing.name; $('dSpec').value = editing.specialty; $('dFee').value = editing.fee; $('dLimit').value = editing.daily_limit;
   $('dOdoo').value = editing.odoo_doctor_id ?? ''; $('dSort').value = editing.sort_order ?? 0; $('dBio').value = editing.bio || ''; $('dActive').checked = editing.active !== false;
-  $('dStart').value = (editing.start_time||'').slice(0,5); $('dEnd').value = (editing.end_time||'').slice(0,5);
+  $('dStart').value = (editing.start_time||'').slice(0,5); $('dEnd').value = (editing.end_time||'').slice(0,5); $('dSlot').value = editing.slot_minutes ?? '';
   $('dDays').innerHTML = WEEK.map((w,i) => `<label><input type="checkbox" value="${i}" ${(editing.work_days||[]).includes(i)?'checked':''}>${w}</label>`).join('');
   $('dPrev').innerHTML = av(editing); $('dUp').textContent = ''; $('docOv').hidden = false;
 }
@@ -296,7 +297,7 @@ $('docForm').onsubmit = async (e) => {
   const row = { id: editing.id, name: $('dName').value.trim(), specialty: $('dSpec').value.trim(), fee: +$('dFee').value, daily_limit: +$('dLimit').value,
     odoo_doctor_id: $('dOdoo').value ? +$('dOdoo').value : null, sort_order: +$('dSort').value || 0, bio: $('dBio').value.trim() || null,
     photo_url: editing.photo_url || null, work_days: days, active: $('dActive').checked,
-    start_time: $('dStart').value || null, end_time: $('dEnd').value || null };
+    start_time: $('dStart').value || null, end_time: $('dEnd').value || null, slot_minutes: $('dSlot').value ? +$('dSlot').value : null };
   if (row.start_time && row.end_time && row.end_time <= row.start_time){ toast('Saacadda dhammaadka waa inay ka dambeysaa bilowga'); return; }
   try { await BX.saveDoctor(row); $('docOv').hidden = true; toast('💾 Waa la kaydiyay'); DOCS = await BX.allDoctors(); renderDocs(); }
   catch(err){ toast(err.message); }
