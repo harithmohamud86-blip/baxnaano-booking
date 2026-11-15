@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>NerveCheckTrace · Doctor's code</title>
+<style>
+:root{--navy:#0b2e4f;--teal:#0f7c8c;--ink:#1d2733;--mute:#6b7a89;--line:#dfe6ec;--bg:#f4f7fa;--bad:#b3261e}
+*{box-sizing:border-box}body{margin:0;font:16px/1.45 "Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:var(--navy);color:#fff;padding:16px 20px;border-bottom:4px solid var(--teal)}header h1{margin:0;font-size:19px;font-weight:600}header p{margin:2px 0 0;opacity:.8;font-size:13px}
+main{max-width:460px;margin:0 auto;padding:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+label{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
+input{width:100%;font:inherit;font-size:20px;padding:12px 14px;border:1.5px solid #c6d1db;border-radius:10px;margin-bottom:14px}
+input:focus{outline:none;border-color:var(--teal)}
+button{width:100%;font:inherit;font-weight:700;font-size:17px;border:0;border-radius:10px;padding:14px;background:var(--teal);color:#fff;cursor:pointer}
+.out{text-align:center;display:none}.code{font:800 46px/1.1 Consolas,"SF Mono",monospace;letter-spacing:6px;color:var(--navy);margin:6px 0}
+.for{font-size:15px;color:var(--mute)}.err{color:var(--bad);font-weight:700;display:none;margin-top:10px}
+ol{padding-left:20px;margin:0}li{margin:4px 0}small{color:var(--mute)}
+</style></head><body>
+<header><h1>NerveCheckTrace &middot; Doctor's code</h1><p>A one-time code for one waiting report</p></header>
+<main>
+ <div class="card">
+  <label for="im">Report number</label>
+  <input id="im" inputmode="text" autocomplete="off" autocapitalize="characters" placeholder="IM006043">
+  <label for="pin">Your doctor's code</label>
+  <input id="pin" type="password" autocomplete="off" placeholder="the code you set on the laptop">
+  <button id="go">Make code</button>
+  <div class="err" id="err"></div>
+ </div>
+ <div class="card out" id="out">
+  <div class="for" id="for"></div>
+  <div class="code" id="code"></div>
+  <div class="for">Works only for this report, only once, only today.</div>
+ </div>
+ <div class="card"><b>How it works</b>
+  <ol><li>The laptop shows a report as <b>Not sent</b>.</li>
+   <li>The technologist sends you its number.</li>
+   <li>You make the code here and send it back.</li>
+   <li>She types it in the <b>Doctor's code</b> box. The report is sent.</li></ol>
+  <p><small>Your code is not saved and not sent anywhere. The code is made on this phone.</small></p></div>
+</main>
+<script>
+const enc=new TextEncoder(),$=id=>document.getElementById(id);
+function norm(v){const m=String(v).toUpperCase().match(/(\d{4,7})/);return m?'IM'+m[1].padStart(6,'0'):''}
+function today(){const d=new Date(),p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())}
+async function makeCode(pin,test,day){
+ const base=await crypto.subtle.importKey('raw',enc.encode(pin),'PBKDF2',false,['deriveBits']);
+ const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:enc.encode('NerveCheckTrace phone release v1'),iterations:150000},base,256);
+ const key=await crypto.subtle.importKey('raw',bits,{name:'HMAC',hash:'SHA-256'},false,['sign']);
+ const h=new DataView(await crypto.subtle.sign('HMAC',key,enc.encode(test+'|'+day)));
+ return String(h.getUint32(0)%1000000).padStart(6,'0')}
+$('go').onclick=async()=>{const e=$('err');e.style.display='none';$('out').style.display='none';
+ const t=norm($('im').value),pin=$('pin').value;
+ if(!t){e.textContent='Type the report number, for example IM006043.';e.style.display='block';return}
+ if(pin.length<4){e.textContent='Type your doctor\'s code (4 characters or more).';e.style.display='block';return}
+ try{const c=await makeCode(pin,t,today());$('pin').value='';$('for').textContent='Code for '+t+', '+today();$('code').textContent=c.slice(0,3)+' '+c.slice(3);$('out').style.display='block'}
+ catch(x){e.textContent='This browser cannot make the code. Open the page in Chrome or Safari.';e.style.display='block'}};
+if(typeof module!=='undefined')module.exports={makeCode,norm};
+</script></body></html>
